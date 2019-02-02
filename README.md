@@ -12,3 +12,4 @@ See example/sample.cpp for more details.
 * Second arg of WavFileReader.Read() function is not a size of buffer but a count of elements in buffer.
 * WavFileReader.Read() function returns (the total number of samples successfully read)/(NumChannels).
 * WavFileReader.Seek() function returns the same value as fseek() function in stdio.h or cstdio.
+* WavFileReader.Read() function and WavFileReader.ReadLR() function has several overloads that accepts different data types. Convenient isn't it?
