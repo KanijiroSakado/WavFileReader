@@ -4,14 +4,13 @@
 #include<cstring>
 #include"wav_file_reader.h"
 
-
 WavFileReader::WavFileReader(const char* filename, unsigned int gpBufCnt) {
 	this->gpBufCnt = gpBufCnt;
 	WavFileReaderPrivate(filename);
 }
 
 WavFileReader::WavFileReader(const char*filename) {
-	gpBufCnt = 44100;
+	gpBufCnt = 44100;//default
 	WavFileReaderPrivate(filename);
 }
 
