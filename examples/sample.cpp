@@ -22,7 +22,7 @@ void example() {
 void advanced_example() {
 
 	//The performance will be better if the second arg of the constructor is set to the same value as which is used when loading  
-	//The arg is related to the size of internal buffer
+	//The arg is related to the size of the internal buffer
 	WavFileReader wfr("test.wav",44100);
 
 	//You can also load left and right data separately
