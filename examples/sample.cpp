@@ -1,7 +1,6 @@
 #include"wav_file_reader.h"
 #include<cstdlib>
 
-
 void example() {
 
 	WavFileReader wfr("test.wav");
@@ -63,12 +62,5 @@ int main(void) {
 	example();
 	advanced_example();
 	
-	getc(stdin);
 	return 0;
 }
-
-
-
-
-
-
