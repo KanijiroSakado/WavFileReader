@@ -54,7 +54,6 @@ void advanced_example() {
 }
 
 
-
 int main(void) {
 
 	//This prgram only do loading data from file
