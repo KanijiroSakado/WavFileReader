@@ -40,7 +40,8 @@ void advanced_example() {
 	wfr.Seek(100000, WAV_SEEK_CUR);
 
 
-//Read function and ReadLR function has several overloads
+//Read() function and ReadLR() function has several overloads
+//unsigned char, signed short int, int, double, float are available
 	int *bufInt = (int*)malloc(sizeof(int) * 44100);
 	double *bufDouble = (double*)malloc(sizeof(double) * 44100);
 
