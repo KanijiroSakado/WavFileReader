@@ -7,7 +7,7 @@ See example/sample.cpp for more details.
 
 ## Notice
 * Supported WAV format are 8bit and 16bit.
-* WavFileReader.Read() function function has several overloads that accepts different data types. Convenient isn't it?
+* WavFileReader.Read() function has several overloads that accepts different data types. Convenient isn't it?
 * Loaded data will be automatically converted from signed 16bit to unsigned 8bit ONLY when the WAV format is 16bit and prepared buffer is 8bit.
 * WavFileReader() constructor throws WFRException object defined in wav_file_reader.h when some exception occured.
 * Second arg of WavFileReader.Read() function is not a size of buffer but a count of elements in buffer.
