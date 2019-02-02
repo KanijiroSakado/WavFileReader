@@ -44,7 +44,7 @@ void advanced_example() {
 
 
 //Read() function and ReadLR() function has several overloads
-//unsigned char, signed short int, int, double, float are available
+//unsigned char, signed short, int, double, float are available
 	int *bufInt = (int*)malloc(sizeof(int) * 44100);
 	double *bufDouble = (double*)malloc(sizeof(double) * 44100);
 
