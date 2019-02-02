@@ -1,5 +1,5 @@
 # WavFileReader
-Simple and easy C++ reader(loader) for WAV file.
+Simple and easy WAV file reader(loader) in C++.
 
 Use WavFileReader.Read() function to read data from WAV file.  
 See sample.cpp for more detail.
