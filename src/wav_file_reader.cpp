@@ -60,7 +60,6 @@ void WavFileReader::WavFileReaderPrivate(const char*filename) {
 	if(BytesPerSample==1)gpbuf = (unsigned char*)malloc(sizeof(unsigned char) * gpBufCnt * NumChannels);
 	else gpbuf = (signed short*)malloc(sizeof(signed short) * gpBufCnt * NumChannels);
 
-
 	return;
 }
 
