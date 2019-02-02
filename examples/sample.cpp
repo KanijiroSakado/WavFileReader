@@ -1,5 +1,7 @@
 #include"wav_file_reader.h"
 #include<cstdlib>
+
+//namespace necessary
 using namespace goldsakana;
 
 void example() {
