@@ -8,7 +8,7 @@ void example() {
 	unsigned char *buf = (unsigned char*)malloc(sizeof(unsigned char) * 44100);
 
 	//Load first 44100 samples to buf
-	//Loaded values will be (L+R)/2 if the file format is Stereo Channels 
+	//Loaded values will be (L+R)/2 if the WAV format is Stereo Channels 
 	wfr.Read(buf, 44100);
 
 	//Load next 44100 samples to buf
