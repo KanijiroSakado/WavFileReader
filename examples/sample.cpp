@@ -36,7 +36,7 @@ void advanced_example() {
 	wfr.ReadLR(bufL, bufR, 44100);
 
 //You can use WavFileReader.Seek() function like fseek() function in stdio.h or cstdio
-//The first arg is not a bytes-based size but a sample-based size
+//The first arg is not a bytes-based size but a samples-based size
 //If the format is Stereo, the file pointer will jump to (first arg)*2 samples ahead
 	wfr.Seek(100000, WAV_SEEK_CUR);
 
