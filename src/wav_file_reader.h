@@ -14,7 +14,6 @@ class WavFileReader {
 
 public:
 
-	FILE* fp;
 	unsigned int FmtSize;
 	unsigned short FmtID;
 	unsigned short NumChannels;
@@ -47,6 +46,7 @@ public:
 	int Seek(long offset, int origin);
 
 private:
+	FILE* fp;
 	int gpBufCnt;//count of general purpose buf = total buf size / BlockAlign
 	void *gpbuf;
 	void WavFileReaderPrivate(const char*filename);
