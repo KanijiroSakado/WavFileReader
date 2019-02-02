@@ -1,6 +1,6 @@
 #include"wav_file_reader.h"
 #include<cstdlib>
-using namespace wfr;
+using namespace goldsakana;
 
 void example() {
 
