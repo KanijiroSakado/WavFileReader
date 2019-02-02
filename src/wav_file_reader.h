@@ -1,6 +1,6 @@
-#ifdef WAVE_FILE_READER
+#ifdef WAVE_FILE_READER_H
 #else
-#define WAV_FILE_READER
+#define WAV_FILE_READER_H
 
 #include<cstdio>
 #include<exception>
