@@ -3,7 +3,7 @@
 #include<cstdlib>
 #include<cstring>
 #include"wav_file_reader.h"
-using namespace golds;
+using namespace goldsakana;
 
 WavFileReader::WavFileReader(const char* filename, unsigned int gpBufCnt) {
 	this->gpBufCnt = gpBufCnt;
