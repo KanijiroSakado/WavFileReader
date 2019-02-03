@@ -54,7 +54,7 @@ void WavFileReader::WavFileReaderPrivate(const char*filename) {
 
 	if (BitsPerSample != 8 && BitsPerSample != 16){
 		fclose(fp);
-		WFRSupportedFormatException();
+		throw WFRSupportedFormatException();
 	}
 
 	if(BytesPerSample==1)gpbuf = (unsigned char*)malloc(sizeof(unsigned char) * gpBufCnt * NumChannels);
