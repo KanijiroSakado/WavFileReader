@@ -1,4 +1,3 @@
-#define _CRT_SECURE_NO_WARNINGS//without this, Visual Studio throws warnings for fopen function that suggests to use fopen_s instead
 #include<cstdio>
 #include<cstdlib>
 #include<cstring>
