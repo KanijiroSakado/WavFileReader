@@ -2,7 +2,7 @@
 #include<cstdlib>
 
 //namespace necessary
-using namespace kingyo;
+using namespace gold;
 
 void example() {
 
