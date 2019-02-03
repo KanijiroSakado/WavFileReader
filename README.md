@@ -9,8 +9,6 @@ The way of using it is very similar to  `fread()` function in `stdio.h` or `cstd
 ```
 #include"wav_file_reader.h"
 #include<cstdlib>
-
-//namespace necessary
 using namespace kingyo;
 
 void example() {
