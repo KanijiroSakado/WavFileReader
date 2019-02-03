@@ -7,6 +7,7 @@ using namespace kingyo;
 void example() {
 
 	unsigned char buf[44100];
+	
 	WavFileReader wfr("test.wav");
 
 //Load first 44100 samples to buf
