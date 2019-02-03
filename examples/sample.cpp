@@ -6,9 +6,8 @@ using namespace kingyo;
 
 void example() {
 
+	unsigned char buf[44100];
 	WavFileReader wfr("test.wav");
-	
-	unsigned char *buf = (unsigned char*)malloc(sizeof(unsigned char) * 44100);
 
 //Load first 44100 samples to buf
 //Be aware that second arg is not a size of the buffer but a count of elements in the buffer
@@ -18,8 +17,6 @@ void example() {
 //Load next 44100 samples to buf
 	wfr.Read(buf, 44100);
 
-	free(buf);
-
 	return;
 }
 
@@ -28,38 +25,32 @@ void advanced_example() {
 
 //The performance will be better if the second arg of the constructor is set to the same value as which is used when loading  
 //The arg is related to the size of the internal buffer
-	WavFileReader wfr("test.wav",44100);
+	WavFileReader wfr("test.wav",1000);
 
 //You can also load left and right data separately
 //If the format is Mono, same values will be loaded to bufL and bufR
-	unsigned char *bufL = (unsigned char*)malloc(sizeof(unsigned char) * 44100);
-	unsigned char *bufR = (unsigned char*)malloc(sizeof(unsigned char) * 44100);
+	unsigned char bufL[1000];
+	unsigned char bufR[1000];
 
-	wfr.ReadLR(bufL, bufR, 44100);
+	wfr.ReadLR(bufL, bufR, 1000);
 
 //You can use WavFileReader.Seek() function like fseek() function in stdio.h or cstdio
 //The first arg is not a bytes-based size but a samples-based size
 //If the format is Stereo, the file pointer will jump to (first arg)*2 samples ahead
-	wfr.Seek(100000, WAV_SEEK_CUR);
+	wfr.Seek(5000, WAV_SEEK_CUR);
 
 //Read() function and ReadLR() function has several overloads
 //unsigned char, signed short, int, double, float are available
-	int *bufInt = (int*)malloc(sizeof(int) * 44100);
-	double *bufDouble = (double*)malloc(sizeof(double) * 44100);
+	int bufInt[1000];
+	double bufDouble[1000];
 	
-	wfr.Read(bufInt, 44100);
-	wfr.Read(bufDouble, 44100);
+	wfr.Read(bufInt, 1000);
+	wfr.Read(bufDouble, 1000);
 
 //You can learn some format information 
 	int v1 = wfr.NumChannels
 	int v2 = wfr.SampleRate
 	int v3 = wfr.BitsPerSample
-	
-		
-	free(bufL);
-	free(bufR);
-	free(bufInt);
-	free(bufDouble);
 
 	return;
 }
