@@ -56,6 +56,11 @@ void WavFileReader::WavFileReaderPrivate(const char*filename) {
 		fclose(fp);
 		throw WFRSupportedFormatException();
 	}
+	
+	if (NumChannels != 1 && NumChannels != 2) {
+		fclose(fp);
+		throw WFRFileValidityException();
+	}
 
 	if (BytesPerSample == 1) {
 		gpbuf = (unsigned char*)malloc(sizeof(unsigned char) * gpBufCnt * NumChannels);
