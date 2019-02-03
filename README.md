@@ -7,7 +7,7 @@ Create kingyo::WavFileReader object and use WavFileReader.Read() function to rea
 The way of using it is very similar to fread() function in stdio.h or cstdio.  
 See examples/sample.cpp for more details.
 
-## Notice
+### Notice
 * Supported WAV format are 8bit and 16bit.
 * WavFileReader.Read() function has several overloads that accept different data types. Convenient isn't it?
 * Loaded data will be automatically converted and downsized from signed 16bit to unsigned 8bit by WavFileReader.Read() function ONLY WHEN the WAV format is 16bit and the prepared buffer is 8bit.
