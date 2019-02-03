@@ -5,9 +5,6 @@
 #include<cstdio>
 #include<exception>
 
-#define WAV_SEEK_SET SEEK_SET
-#define WAV_SEEK_CUR SEEK_CUR
-#define WAV_SEEK_END SEEK_END
 
 namespace kingyo {
 
