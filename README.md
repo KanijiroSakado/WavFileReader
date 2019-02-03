@@ -16,3 +16,9 @@ See `sample.cpp` for more details.
 * Second arg of `WavFileReader.Read()` function is not a size of the buffer but a count of elements in the buffer.
 * `WavFileReader.Read()` function returns (the total number of samples successfully read)/(NumChannels).
 * `WavFileReader.Seek()` function returns the same value as `fseek()` function in `stdio.h` or `cstdio`.
+
+```
+test
+  test
+test
+```
