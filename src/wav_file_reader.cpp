@@ -85,7 +85,7 @@ WavFileReader::~WavFileReader() {
 
 int WavFileReader::Read(unsigned char *buf, unsigned int leftToRead) {
 
-	unsigned int readCnt,ret=0,temp,i = 0,pointer=0;
+	unsigned int readCnt,temp,i = 0,pointer=0;
 	
 	readCnt = gpBufCnt*NumChannels;
 
@@ -100,7 +100,7 @@ int WavFileReader::Read(unsigned char *buf, unsigned int leftToRead) {
 		}
 
 		temp = fread(gpbuf, BytesPerSample, readCnt, fp);
-		ret += temp;
+
 		if (temp < readCnt) {
 			readCnt = temp;
 			leftToRead = 0;
@@ -131,13 +131,12 @@ int WavFileReader::Read(unsigned char *buf, unsigned int leftToRead) {
 		pointer += i;
 	}
 
-	if (NumChannels == 1)return ret;
-	else return ret >> 1;
+	return pointer;
 }
 
 int WavFileReader::Read(signed short *buf, unsigned int leftToRead) {
 
-	unsigned int readCnt, ret = 0, temp, i = 0, pointer = 0;
+	unsigned int readCnt, temp, i = 0, pointer = 0;
 
 	readCnt = gpBufCnt * NumChannels;
 
@@ -152,7 +151,7 @@ int WavFileReader::Read(signed short *buf, unsigned int leftToRead) {
 		}
 
 		temp = fread(gpbuf, BytesPerSample, readCnt, fp);
-		ret += temp;
+
 		if (temp < readCnt) {
 			readCnt = temp;
 			leftToRead = 0;
@@ -182,13 +181,12 @@ int WavFileReader::Read(signed short *buf, unsigned int leftToRead) {
 		pointer += i;
 	}
 
-	if (NumChannels == 1)return ret;
-	else return ret >> 1;
+	return pointer;
 }
 
 int WavFileReader::Read(int *buf, unsigned int leftToRead) {
 
-	unsigned int readCnt, ret = 0, temp, i = 0, pointer = 0;
+	unsigned int readCnt, temp, i = 0, pointer = 0;
 
 	readCnt = gpBufCnt * NumChannels;
 
@@ -203,7 +201,7 @@ int WavFileReader::Read(int *buf, unsigned int leftToRead) {
 		}
 
 		temp = fread(gpbuf, BytesPerSample, readCnt, fp);
-		ret += temp;
+
 		if (temp < readCnt) {
 			readCnt = temp;
 			leftToRead = 0;
@@ -234,13 +232,12 @@ int WavFileReader::Read(int *buf, unsigned int leftToRead) {
 		pointer += i;
 	}
 
-	if (NumChannels == 1)return ret;
-	else return ret >> 1;
+	return pointer;
 }
 
 int WavFileReader::Read(double *buf, unsigned int leftToRead) {
 
-	unsigned int readCnt, ret = 0, temp, i = 0, pointer = 0;
+	unsigned int readCnt, temp, i = 0, pointer = 0;
 
 	readCnt = gpBufCnt * NumChannels;
 
@@ -255,7 +252,7 @@ int WavFileReader::Read(double *buf, unsigned int leftToRead) {
 		}
 
 		temp = fread(gpbuf, BytesPerSample, readCnt, fp);
-		ret += temp;
+
 		if (temp < readCnt) {
 			readCnt = temp;
 			leftToRead = 0;
@@ -286,13 +283,12 @@ int WavFileReader::Read(double *buf, unsigned int leftToRead) {
 		pointer += i;
 	}
 
-	if (NumChannels == 1)return ret;
-	else return ret >> 1;
+	return pointer;
 }
 
 int WavFileReader::Read(float *buf, unsigned int leftToRead) {
 
-	unsigned int readCnt, ret = 0, temp, i = 0, pointer = 0;
+	unsigned int readCnt, temp, i = 0, pointer = 0;
 
 	readCnt = gpBufCnt * NumChannels;
 
@@ -307,7 +303,7 @@ int WavFileReader::Read(float *buf, unsigned int leftToRead) {
 		}
 
 		temp = fread(gpbuf, BytesPerSample, readCnt, fp);
-		ret += temp;
+
 		if (temp < readCnt) {
 			readCnt = temp;
 			leftToRead = 0;
@@ -338,13 +334,12 @@ int WavFileReader::Read(float *buf, unsigned int leftToRead) {
 		pointer += i;
 	}
 
-	if (NumChannels == 1)return ret;
-	else return ret >> 1;
+	return pointer;
 }
 
 int WavFileReader::ReadLR(unsigned char *bufL, unsigned char *bufR, unsigned int leftToRead) {
 
-	unsigned int readCnt,ret=0,temp, i = 0, pointer = 0;
+	unsigned int readCnt, temp, i = 0, pointer = 0;
 
 	readCnt = gpBufCnt * NumChannels;
 
@@ -359,7 +354,7 @@ int WavFileReader::ReadLR(unsigned char *bufL, unsigned char *bufR, unsigned int
 		}
 
 		temp = fread(gpbuf, BytesPerSample, readCnt, fp);
-		ret += temp;
+
 		if (temp < readCnt) {
 			readCnt = temp;
 			leftToRead = 0;
@@ -393,13 +388,12 @@ int WavFileReader::ReadLR(unsigned char *bufL, unsigned char *bufR, unsigned int
 		pointer += i;
 	}
 
-	if (NumChannels == 1)return ret;
-	else return ret >> 1;
+	return pointer;
 }
 
 int WavFileReader::ReadLR(signed short *bufL, signed short *bufR, unsigned int leftToRead) {
 
-	unsigned int readCnt, ret = 0, temp, i = 0, pointer = 0;
+	unsigned int readCnt, temp, i = 0, pointer = 0;
 
 	readCnt = gpBufCnt * NumChannels;
 
@@ -414,7 +408,7 @@ int WavFileReader::ReadLR(signed short *bufL, signed short *bufR, unsigned int l
 		}
 
 		temp = fread(gpbuf, BytesPerSample, readCnt, fp);
-		ret += temp;
+
 		if (temp < readCnt) {
 			readCnt = temp;
 			leftToRead = 0;
@@ -448,13 +442,12 @@ int WavFileReader::ReadLR(signed short *bufL, signed short *bufR, unsigned int l
 		pointer += i;
 	}
 
-	if (NumChannels == 1)return ret;
-	else return ret >> 1;
+	return pointer;
 }
 
 int WavFileReader::ReadLR(int *bufL, int *bufR, unsigned int leftToRead) {
 
-	unsigned int readCnt, ret = 0, temp, i = 0, pointer = 0;
+	unsigned int readCnt, temp, i = 0, pointer = 0;
 
 	readCnt = gpBufCnt * NumChannels;
 
@@ -469,7 +462,7 @@ int WavFileReader::ReadLR(int *bufL, int *bufR, unsigned int leftToRead) {
 		}
 
 		temp = fread(gpbuf, BytesPerSample, readCnt, fp);
-		ret += temp;
+
 		if (temp < readCnt) {
 			readCnt = temp;
 			leftToRead = 0;
@@ -504,13 +497,12 @@ int WavFileReader::ReadLR(int *bufL, int *bufR, unsigned int leftToRead) {
 		pointer += i;
 	}
 
-	if (NumChannels == 1)return ret;
-	else return ret >> 1;
+	return pointer;
 }
 
 int WavFileReader::ReadLR(double *bufL, double *bufR, unsigned int leftToRead) {
 
-	unsigned int readCnt, ret = 0, temp, i = 0, pointer = 0;
+	unsigned int readCnt, temp, i = 0, pointer = 0;
 
 	readCnt = gpBufCnt * NumChannels;
 
@@ -525,7 +517,7 @@ int WavFileReader::ReadLR(double *bufL, double *bufR, unsigned int leftToRead) {
 		}
 
 		temp = fread(gpbuf, BytesPerSample, readCnt, fp);
-		ret += temp;
+
 		if (temp < readCnt) {
 			readCnt = temp;
 			leftToRead = 0;
@@ -560,13 +552,12 @@ int WavFileReader::ReadLR(double *bufL, double *bufR, unsigned int leftToRead) {
 		pointer += i;
 	}
 
-	if (NumChannels == 1)return ret;
-	else return ret >> 1;
+	return pointer;
 }
 
 int WavFileReader::ReadLR(float *bufL, float *bufR, unsigned int leftToRead) {
 
-	unsigned int readCnt, ret = 0, temp, i = 0, pointer = 0;
+	unsigned int readCnt, temp, i = 0, pointer = 0;
 
 	readCnt = gpBufCnt * NumChannels;
 
@@ -581,7 +572,7 @@ int WavFileReader::ReadLR(float *bufL, float *bufR, unsigned int leftToRead) {
 		}
 
 		temp = fread(gpbuf, BytesPerSample, readCnt, fp);
-		ret += temp;
+
 		if (temp < readCnt) {
 			readCnt = temp;
 			leftToRead = 0;
@@ -616,8 +607,7 @@ int WavFileReader::ReadLR(float *bufL, float *bufR, unsigned int leftToRead) {
 		pointer += i;
 	}
 
-	if (NumChannels == 1)return ret;
-	else return ret >> 1;
+	return pointer;
 }
 
 int WavFileReader::Seek(long offset, int origin) {
