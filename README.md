@@ -1,7 +1,7 @@
 # WavFileReader
 A simple WAV file reader(loader) in C++.
 
-Include wav_file_reader.h in your code, and build your applications with wav_file_reader.c.
+Include wav_file_reader.h in your code, and build your applications with wav_file_reader.c.  
 Create kingyo::WavFileReader object and use WavFileReader.Read() function to read data from WAV file.  
 The way of using it is very similar to fread() function in stdio.h or cstdio.  
 See examples/sample.cpp for more details.
