@@ -27,5 +27,5 @@ See `sample.cpp` for more details.
 * Loaded data will be automatically converted and downsized from signed 16bit to unsigned 8bit by `WavFileReader.Read()` function ONLY WHEN the WAV format is 16bit and the prepared buffer is 8bit.
 * `WavFileReader()` constructor throws WFRException object defined in `wav_file_reader.h` when some exception occured.
 * Second arg of `WavFileReader.Read()` function is not a size of the buffer but a count of elements in the buffer.
-* `WavFileReader.Read()` function returns (the total number of samples successfully read)/(NumChannels).
+* `WavFileReader.Read()` function returns (the total number of samples successfully read)/(NumChannels). Use it to check EOF.
 * `WavFileReader.Seek()` function returns the same value as `fseek()` function in `stdio.h` or `cstdio`.
