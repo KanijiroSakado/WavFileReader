@@ -6,7 +6,7 @@
 #include<exception>
 
 
-namespace kingyo {
+namespace gold {
 
 	class WavFileReader {
 
