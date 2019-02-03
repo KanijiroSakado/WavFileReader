@@ -8,18 +8,15 @@ Create `kingyo::WavFileReader` object and use `WavFileReader.Read()` function to
 The way of using it is very similar to  `fread()` function in `stdio.h` or `cstdio`.  
 ```
 #include"wav_file_reader.h"
-#include<cstdlib>
 using namespace kingyo;
 
 void example() {
 
+	unsigned char buf[44100];
+	
 	WavFileReader wfr("test.wav");
 	
-	unsigned char *buf = (unsigned char*)malloc(sizeof(unsigned char) * 44100);
-
 	wfr.Read(buf, 44100);
-
-	free(buf);
 
 	return;
 }
