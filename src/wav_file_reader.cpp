@@ -85,11 +85,11 @@ WavFileReader::~WavFileReader() {
 
 int WavFileReader::Read(unsigned char *buf, unsigned int leftToRead) {
 
-	unsigned int readCnt,temp,i = 0,pointer=0;
+	unsigned int readCnt, numSuccess,i = 0,pointer=0;
 	
 	readCnt = gpBufCnt*NumChannels;
 
-	while (leftToRead>0) {
+	while (leftToRead > 0) {
 		
 		if (leftToRead < gpBufCnt) {
 			readCnt = leftToRead * NumChannels;
@@ -99,36 +99,33 @@ int WavFileReader::Read(unsigned char *buf, unsigned int leftToRead) {
 			leftToRead -= gpBufCnt;
 		}
 
-		temp = fread(gpbuf, BytesPerSample, readCnt, fp);
+		numSuccess = fread(gpbuf, BytesPerSample, readCnt, fp);
 
-		if (temp < readCnt) {
-			readCnt = temp;
+		if (numSuccess < readCnt) {
+			readCnt = numSuccess;
 			leftToRead = 0;
 		}
 		
 
 		if (NumChannels == 1 && BytesPerSample == 1) {
 			memcpy(buf + pointer, ucharp, readCnt);
-			i = readCnt;
+			pointer += readCnt;
 		}
 		else if (NumChannels == 1 && BytesPerSample == 2) {
-			for (i=0; i < readCnt; i++) {
-				buf[pointer + i] = (unsigned int)((int)shortp[i] + 0x8fff) >> 9;
+			for (i=0; i < readCnt; pointer++, i++) {
+				buf[pointer] = (unsigned int)((int)shortp[i] + 0x8fff) >> 9;
 			}
 		}
 		else if (NumChannels == 2 && BytesPerSample == 1) {
-			temp = readCnt >> 1;
-			for (i = 0; i < temp; i++) {
-				buf[pointer+i] = ((unsigned int)ucharp[i << 1] + (unsigned int)ucharp[(i << 1) + 1]) >> 1;
+			for (i = 0; i < readCnt; pointer++, i+=2) {
+				buf[pointer] = ((unsigned int)ucharp[i] + (unsigned int)ucharp[i+1]) >> 1;
 			}
 		}
 		else if (NumChannels == 2 && BytesPerSample == 2) {
-			temp = readCnt >> 1;
-			for (i = 0; i < temp; i++) {
-				buf[pointer + i] = (unsigned int)((int)shortp[i << 1] + (int)shortp[(i << 1) + 1] + 0xffff) >> 9;
+			for (i = 0; i < readCnt; pointer++, i+=2) {
+				buf[pointer] = (unsigned int)((int)shortp[i] + (int)shortp[i+1] + 0xffff) >> 9;
 			}
 		}
-		pointer += i;
 	}
 
 	return pointer;
@@ -136,7 +133,7 @@ int WavFileReader::Read(unsigned char *buf, unsigned int leftToRead) {
 
 int WavFileReader::Read(signed short *buf, unsigned int leftToRead) {
 
-	unsigned int readCnt, temp, i = 0, pointer = 0;
+	unsigned int readCnt, numSuccess, i = 0, pointer = 0;
 
 	readCnt = gpBufCnt * NumChannels;
 
@@ -150,35 +147,32 @@ int WavFileReader::Read(signed short *buf, unsigned int leftToRead) {
 			leftToRead -= gpBufCnt;
 		}
 
-		temp = fread(gpbuf, BytesPerSample, readCnt, fp);
+		numSuccess = fread(gpbuf, BytesPerSample, readCnt, fp);
 
-		if (temp < readCnt) {
-			readCnt = temp;
+		if (numSuccess < readCnt) {
+			readCnt = numSuccess;
 			leftToRead = 0;
 		}
 
 		if (NumChannels == 1 && BytesPerSample == 1) {
-			for (i = 0; i < readCnt; i++) {
-				buf[pointer + i] = ucharp[i];
+			for (i = 0; i < readCnt; pointer++, i++) {
+				buf[pointer] = ucharp[i];
 			}
 		}
 		else if (NumChannels == 1 && BytesPerSample == 2) {
 			memcpy(buf + pointer, shortp, readCnt);
-			i = readCnt;
+			pointer += readCnt;
 		}
 		else if (NumChannels == 2 && BytesPerSample == 1) {
-			temp = readCnt >> 1;
-			for (i = 0; i < temp; i++) {
-				buf[pointer + i] = ((int)ucharp[i << 1] + (int)ucharp[(i << 1) + 1])/2;
+			for (i = 0; i < readCnt; pointer++, i+=2) {
+				buf[pointer] = ((int)ucharp[i] + (int)ucharp[i+1])/2;
 			}
 		}
 		else if (NumChannels == 2 && BytesPerSample == 2) {
-			temp = readCnt >> 1;
-			for (i = 0; i < temp; i++) {
-				buf[pointer + i] = ((int)shortp[i << 1] + (int)shortp[(i << 1) + 1])/2;
+			for (i = 0; i < readCnt; pointer++, i+=2) {
+				buf[pointer] = ((int)shortp[i] + (int)shortp[i+1])/2;
 			}
 		}
-		pointer += i;
 	}
 
 	return pointer;
@@ -186,7 +180,7 @@ int WavFileReader::Read(signed short *buf, unsigned int leftToRead) {
 
 int WavFileReader::Read(int *buf, unsigned int leftToRead) {
 
-	unsigned int readCnt, temp, i = 0, pointer = 0;
+	unsigned int readCnt, numSuccess, i = 0, pointer = 0;
 
 	readCnt = gpBufCnt * NumChannels;
 
@@ -200,36 +194,33 @@ int WavFileReader::Read(int *buf, unsigned int leftToRead) {
 			leftToRead -= gpBufCnt;
 		}
 
-		temp = fread(gpbuf, BytesPerSample, readCnt, fp);
+		numSuccess = fread(gpbuf, BytesPerSample, readCnt, fp);
 
-		if (temp < readCnt) {
-			readCnt = temp;
+		if (numSuccess < readCnt) {
+			readCnt = numSuccess;
 			leftToRead = 0;
 		}
 
 		if (NumChannels == 1 && BytesPerSample == 1) {
-			for (i = 0; i < readCnt; i++) {
-				buf[pointer + i] = ucharp[i];
+			for (i = 0; i < readCnt; pointer++, i++) {
+				buf[pointer] = ucharp[i];
 			}
 		}
 		else if (NumChannels == 1 && BytesPerSample == 2) {
-			for (i = 0; i < readCnt; i++) {
-				buf[pointer + i] = shortp[i];
+			for (i = 0; i < readCnt; pointer++, i++) {
+				buf[pointer] = shortp[i];
 			}
 		}
 		else if (NumChannels == 2 && BytesPerSample == 1) {
-			temp = readCnt >> 1;
-			for (i = 0; i < temp; i++) {
-				buf[pointer + i] = ((int)ucharp[i << 1] + (int)ucharp[(i << 1) + 1]) / 2;
+			for (i = 0; i < readCnt; pointer++, i+=2) {
+				buf[pointer] = ((int)ucharp[i] + (int)ucharp[i+1]) / 2;
 			}
 		}
 		else if (NumChannels == 2 && BytesPerSample == 2) {
-			temp = readCnt >> 1;
-			for (i = 0; i < temp; i++) {
-				buf[pointer + i] = ((int)shortp[i << 1] + (int)shortp[(i << 1) + 1]) / 2;
+			for (i = 0; i < readCnt; pointer++, i+=2) {
+				buf[pointer] = ((int)shortp[i] + (int)shortp[i+1]) / 2;
 			}
 		}
-		pointer += i;
 	}
 
 	return pointer;
@@ -237,7 +228,7 @@ int WavFileReader::Read(int *buf, unsigned int leftToRead) {
 
 int WavFileReader::Read(double *buf, unsigned int leftToRead) {
 
-	unsigned int readCnt, temp, i = 0, pointer = 0;
+	unsigned int readCnt, numSuccess, i = 0, pointer = 0;
 
 	readCnt = gpBufCnt * NumChannels;
 
@@ -251,36 +242,33 @@ int WavFileReader::Read(double *buf, unsigned int leftToRead) {
 			leftToRead -= gpBufCnt;
 		}
 
-		temp = fread(gpbuf, BytesPerSample, readCnt, fp);
+		numSuccess = fread(gpbuf, BytesPerSample, readCnt, fp);
 
-		if (temp < readCnt) {
-			readCnt = temp;
+		if (numSuccess < readCnt) {
+			readCnt = numSuccess;
 			leftToRead = 0;
 		}
 
 		if (NumChannels == 1 && BytesPerSample == 1) {
-			for (i = 0; i < readCnt; i++) {
-				buf[pointer + i] = ucharp[i];
+			for (i = 0; i < readCnt; pointer++, i++) {
+				buf[pointer] = ucharp[i];
 			}
 		}
 		else if (NumChannels == 1 && BytesPerSample == 2) {
-			for (i = 0; i < readCnt; i++) {
-				buf[pointer + i] = shortp[i];
+			for (i = 0; i < readCnt; pointer++, i++) {
+				buf[pointer] = shortp[i];
 			}
 		}
 		else if (NumChannels == 2 && BytesPerSample == 1) {
-			temp = readCnt >> 1;
-			for (i = 0; i < temp; i++) {
-				buf[pointer + i] = ((int)ucharp[i << 1] + (int)ucharp[(i << 1) + 1]) / 2;
+			for (i = 0; i < readCnt; pointer++, i+=2) {
+				buf[pointer] = ((int)ucharp[i] + (int)ucharp[i+1]) / 2;
 			}
 		}
 		else if (NumChannels == 2 && BytesPerSample == 2) {
-			temp = readCnt >> 1;
-			for (i = 0; i < temp; i++) {
-				buf[pointer + i] = ((int)shortp[i << 1] + (int)shortp[(i << 1) + 1]) / 2;
+			for (i = 0; i < readCnt; pointer++, i+=2) {
+				buf[pointer] = ((int)shortp[i] + (int)shortp[i+1]) / 2;
 			}
 		}
-		pointer += i;
 	}
 
 	return pointer;
@@ -288,7 +276,7 @@ int WavFileReader::Read(double *buf, unsigned int leftToRead) {
 
 int WavFileReader::Read(float *buf, unsigned int leftToRead) {
 
-	unsigned int readCnt, temp, i = 0, pointer = 0;
+	unsigned int readCnt, numSuccess, i = 0, pointer = 0;
 
 	readCnt = gpBufCnt * NumChannels;
 
@@ -302,36 +290,33 @@ int WavFileReader::Read(float *buf, unsigned int leftToRead) {
 			leftToRead -= gpBufCnt;
 		}
 
-		temp = fread(gpbuf, BytesPerSample, readCnt, fp);
+		numSuccess = fread(gpbuf, BytesPerSample, readCnt, fp);
 
-		if (temp < readCnt) {
-			readCnt = temp;
+		if (numSuccess < readCnt) {
+			readCnt = numSuccess;
 			leftToRead = 0;
 		}
 
 		if (NumChannels == 1 && BytesPerSample == 1) {
-			for (i = 0; i < readCnt; i++) {
-				buf[pointer + i] = ucharp[i];
+			for (i = 0; i < readCnt; pointer++, i++) {
+				buf[pointer] = ucharp[i];
 			}
 		}
 		else if (NumChannels == 1 && BytesPerSample == 2) {
-			for (i = 0; i < readCnt; i++) {
-				buf[pointer + i] = shortp[i];
+			for (i = 0; i < readCnt; pointer++, i++) {
+				buf[pointer] = shortp[i];
 			}
 		}
 		else if (NumChannels == 2 && BytesPerSample == 1) {
-			temp = readCnt >> 1;
-			for (i = 0; i < temp; i++) {
-				buf[pointer + i] = ((int)ucharp[i << 1] + (int)ucharp[(i << 1) + 1]) / 2;
+			for (i = 0; i < readCnt; pointer++, i+=2) {
+				buf[pointer] = ((int)ucharp[i] + (int)ucharp[i+1]) / 2;
 			}
 		}
 		else if (NumChannels == 2 && BytesPerSample == 2) {
-			temp = readCnt >> 1;
-			for (i = 0; i < temp; i++) {
-				buf[pointer + i] = ((int)shortp[i << 1] + (int)shortp[(i << 1) + 1]) / 2;
+			for (i = 0; i < readCnt; pointer++, i+=2) {
+				buf[pointer] = ((int)shortp[i] + (int)shortp[i+1]) / 2;
 			}
 		}
-		pointer += i;
 	}
 
 	return pointer;
@@ -339,7 +324,7 @@ int WavFileReader::Read(float *buf, unsigned int leftToRead) {
 
 int WavFileReader::ReadLR(unsigned char *bufL, unsigned char *bufR, unsigned int leftToRead) {
 
-	unsigned int readCnt, temp, i = 0, pointer = 0;
+	unsigned int readCnt, numSuccess, i = 0, pointer = 0;
 
 	readCnt = gpBufCnt * NumChannels;
 
@@ -353,39 +338,36 @@ int WavFileReader::ReadLR(unsigned char *bufL, unsigned char *bufR, unsigned int
 			leftToRead -= gpBufCnt;
 		}
 
-		temp = fread(gpbuf, BytesPerSample, readCnt, fp);
+		numSuccess = fread(gpbuf, BytesPerSample, readCnt, fp);
 
-		if (temp < readCnt) {
-			readCnt = temp;
+		if (numSuccess < readCnt) {
+			readCnt = numSuccess;
 			leftToRead = 0;
 		}
 
 		if (NumChannels == 1 && BytesPerSample == 1) {
 			memcpy(bufR + pointer, ucharp, readCnt);
 			memcpy(bufL + pointer, ucharp, readCnt);
-			i = readCnt;
+			pointer += readCnt;
 		}
 		else if (NumChannels == 1 && BytesPerSample == 2) {
-			for (i = 0; i < readCnt; i++) {
-				bufR[pointer + i] = (unsigned int)((int)shortp[i] + 0x8fff) >> 8;
-				bufL[pointer + i] = (unsigned int)((int)shortp[i] + 0x8fff) >> 8;
+			for (i = 0; i < readCnt; pointer++, i++) {
+				bufR[pointer] = (unsigned int)((int)shortp[i] + 0x8fff) >> 8;
+				bufL[pointer] = (unsigned int)((int)shortp[i] + 0x8fff) >> 8;
 			}
 		}
 		else if (NumChannels == 2 && BytesPerSample == 1) {
-			temp = readCnt >> 1;
-			for (i = 0; i < temp; i++) {
-				bufR[pointer + i] = ucharp[i << 1];
-				bufL[pointer + i] = ucharp[(i << 1) + 1];
+			for (i = 0; i < readCnt; pointer++, i+=2) {
+				bufR[pointer] = ucharp[i];
+				bufL[pointer] = ucharp[i + 1];
 			}
 		}
 		else if (NumChannels == 2 && BytesPerSample == 2) {
-			temp = readCnt >> 1;
-			for (i = 0; i < temp; i++) {
-				bufR[pointer + i] = ((int)shortp[i << 1] + 0x8fff) >> 8;
-				bufL[pointer + i] = ((int)shortp[(i << 1) + 1] + 0x8fff) >> 8;
+			for (i = 0; i < readCnt; pointer++, i+=2) {
+				bufR[pointer] = ((int)shortp[i] + 0x8fff) >> 8;
+				bufL[pointer] = ((int)shortp[i + 1] + 0x8fff) >> 8;
 			}
 		}
-		pointer += i;
 	}
 
 	return pointer;
@@ -393,7 +375,7 @@ int WavFileReader::ReadLR(unsigned char *bufL, unsigned char *bufR, unsigned int
 
 int WavFileReader::ReadLR(signed short *bufL, signed short *bufR, unsigned int leftToRead) {
 
-	unsigned int readCnt, temp, i = 0, pointer = 0;
+	unsigned int readCnt, numSuccess, i = 0, pointer = 0;
 
 	readCnt = gpBufCnt * NumChannels;
 
@@ -407,39 +389,36 @@ int WavFileReader::ReadLR(signed short *bufL, signed short *bufR, unsigned int l
 			leftToRead -= gpBufCnt;
 		}
 
-		temp = fread(gpbuf, BytesPerSample, readCnt, fp);
+		numSuccess = fread(gpbuf, BytesPerSample, readCnt, fp);
 
-		if (temp < readCnt) {
-			readCnt = temp;
+		if (numSuccess < readCnt) {
+			readCnt = numSuccess;
 			leftToRead = 0;
 		}
 
 		if (NumChannels == 1 && BytesPerSample == 1) {
-			for (i = 0; i < readCnt; i++) {
-				bufR[pointer + i] = ucharp[i];
-				bufL[pointer + i] = ucharp[i];
+			for (i = 0; i < readCnt; pointer++, i++) {
+				bufR[pointer] = ucharp[i];
+				bufL[pointer] = ucharp[i];
 			}
 		}
 		else if (NumChannels == 1 && BytesPerSample == 2) {
 			memcpy(bufR + pointer, shortp, readCnt);
 			memcpy(bufL + pointer, shortp, readCnt);
-			i = readCnt;
+			pointer += readCnt;
 		}
 		else if (NumChannels == 2 && BytesPerSample == 1) {
-			temp = readCnt >> 1;
-			for (i = 0; i < temp; i++) {
-				bufR[pointer + i] = ucharp[i << 1];
-				bufL[pointer + i] = ucharp[(i << 1) + 1];
+			for (i = 0; i < readCnt; pointer++, i+=2) {
+				bufR[pointer] = ucharp[i];
+				bufL[pointer] = ucharp[i + 1];
 			}
 		}
 		else if (NumChannels == 2 && BytesPerSample == 2) {
-			temp = readCnt >> 1;
-			for (i = 0; i < temp; i++) {
-				bufR[pointer + i] = shortp[i << 1];
-				bufL[pointer + i] = shortp[(i << 1) + 1];
+			for (i = 0; i < readCnt; pointer++, i+=2) {
+				bufR[pointer] = shortp[i];
+				bufL[pointer] = shortp[i + 1];
 			}
 		}
-		pointer += i;
 	}
 
 	return pointer;
@@ -447,7 +426,7 @@ int WavFileReader::ReadLR(signed short *bufL, signed short *bufR, unsigned int l
 
 int WavFileReader::ReadLR(int *bufL, int *bufR, unsigned int leftToRead) {
 
-	unsigned int readCnt, temp, i = 0, pointer = 0;
+	unsigned int readCnt, numSuccess, i = 0, pointer = 0;
 
 	readCnt = gpBufCnt * NumChannels;
 
@@ -461,40 +440,37 @@ int WavFileReader::ReadLR(int *bufL, int *bufR, unsigned int leftToRead) {
 			leftToRead -= gpBufCnt;
 		}
 
-		temp = fread(gpbuf, BytesPerSample, readCnt, fp);
+		numSuccess = fread(gpbuf, BytesPerSample, readCnt, fp);
 
-		if (temp < readCnt) {
-			readCnt = temp;
+		if (numSuccess < readCnt) {
+			readCnt = numSuccess;
 			leftToRead = 0;
 		}
 
 		if (NumChannels == 1 && BytesPerSample == 1) {
-			for (i = 0; i < readCnt; i++) {
-				bufR[pointer + i] = ucharp[i];
-				bufL[pointer + i] = ucharp[i];
+			for (i = 0; i < readCnt; pointer++, i++) {
+				bufR[pointer] = ucharp[i];
+				bufL[pointer] = ucharp[i];
 			}
 		}
 		else if (NumChannels == 1 && BytesPerSample == 2) {
-			for (i = 0; i < readCnt; i++) {
-				bufR[pointer + i] = shortp[i];
-				bufL[pointer + i] = shortp[i];
+			for (i = 0; i < readCnt; pointer++, i++) {
+				bufR[pointer] = shortp[i];
+				bufL[pointer] = shortp[i];
 			}
 		}
 		else if (NumChannels == 2 && BytesPerSample == 1) {
-			temp = readCnt >> 1;
-			for (i = 0; i < temp; i++) {
-				bufR[pointer + i] = ucharp[i << 1];
-				bufL[pointer + i] = ucharp[(i << 1) + 1];
+			for (i = 0; i < readCnt; pointer++, i += 2) {
+				bufR[pointer] = ucharp[i];
+				bufL[pointer] = ucharp[i + 1];
 			}
 		}
 		else if (NumChannels == 2 && BytesPerSample == 2) {
-			temp = readCnt >> 1;
-			for (i = 0; i < temp; i++) {
-				bufR[pointer + i] = shortp[i << 1];
-				bufL[pointer + i] = shortp[(i << 1) + 1];
+			for (i = 0; i < readCnt; pointer++, i += 2) {
+				bufR[pointer] = shortp[i];
+				bufL[pointer] = shortp[i + 1];
 			}
 		}
-		pointer += i;
 	}
 
 	return pointer;
@@ -502,7 +478,7 @@ int WavFileReader::ReadLR(int *bufL, int *bufR, unsigned int leftToRead) {
 
 int WavFileReader::ReadLR(double *bufL, double *bufR, unsigned int leftToRead) {
 
-	unsigned int readCnt, temp, i = 0, pointer = 0;
+	unsigned int readCnt, numSuccess, i = 0, pointer = 0;
 
 	readCnt = gpBufCnt * NumChannels;
 
@@ -516,40 +492,37 @@ int WavFileReader::ReadLR(double *bufL, double *bufR, unsigned int leftToRead) {
 			leftToRead -= gpBufCnt;
 		}
 
-		temp = fread(gpbuf, BytesPerSample, readCnt, fp);
+		numSuccess = fread(gpbuf, BytesPerSample, readCnt, fp);
 
-		if (temp < readCnt) {
-			readCnt = temp;
+		if (numSuccess < readCnt) {
+			readCnt = numSuccess;
 			leftToRead = 0;
 		}
 
 		if (NumChannels == 1 && BytesPerSample == 1) {
-			for (i = 0; i < readCnt; i++) {
-				bufR[pointer + i] = ucharp[i];
-				bufL[pointer + i] = ucharp[i];
+			for (i = 0; i < readCnt; pointer++, i++) {
+				bufR[pointer] = ucharp[i];
+				bufL[pointer] = ucharp[i];
 			}
 		}
 		else if (NumChannels == 1 && BytesPerSample == 2) {
-			for (i = 0; i < readCnt; i++) {
-				bufR[pointer + i] = shortp[i];
-				bufL[pointer + i] = shortp[i];
+			for (i = 0; i < readCnt; pointer++, i++) {
+				bufR[pointer] = shortp[i];
+				bufL[pointer] = shortp[i];
 			}
 		}
 		else if (NumChannels == 2 && BytesPerSample == 1) {
-			temp = readCnt >> 1;
-			for (i = 0; i < temp; i++) {
-				bufR[pointer + i] = ucharp[i << 1];
-				bufL[pointer + i] = ucharp[(i << 1) + 1];
+			for (i = 0; i < readCnt; pointer++, i += 2) {
+				bufR[pointer] = ucharp[i];
+				bufL[pointer] = ucharp[i + 1];
 			}
 		}
 		else if (NumChannels == 2 && BytesPerSample == 2) {
-			temp = readCnt >> 1;
-			for (i = 0; i < temp; i++) {
-				bufR[pointer + i] = shortp[i << 1];
-				bufL[pointer + i] = shortp[(i << 1) + 1];
+			for (i = 0; i < readCnt; pointer++, i += 2) {
+				bufR[pointer] = shortp[i];
+				bufL[pointer] = shortp[i + 1];
 			}
 		}
-		pointer += i;
 	}
 
 	return pointer;
@@ -557,7 +530,7 @@ int WavFileReader::ReadLR(double *bufL, double *bufR, unsigned int leftToRead) {
 
 int WavFileReader::ReadLR(float *bufL, float *bufR, unsigned int leftToRead) {
 
-	unsigned int readCnt, temp, i = 0, pointer = 0;
+	unsigned int readCnt, numSuccess, i = 0, pointer = 0;
 
 	readCnt = gpBufCnt * NumChannels;
 
@@ -571,40 +544,37 @@ int WavFileReader::ReadLR(float *bufL, float *bufR, unsigned int leftToRead) {
 			leftToRead -= gpBufCnt;
 		}
 
-		temp = fread(gpbuf, BytesPerSample, readCnt, fp);
+		numSuccess = fread(gpbuf, BytesPerSample, readCnt, fp);
 
-		if (temp < readCnt) {
-			readCnt = temp;
+		if (numSuccess < readCnt) {
+			readCnt = numSuccess;
 			leftToRead = 0;
 		}
 
 		if (NumChannels == 1 && BytesPerSample == 1) {
-			for (i = 0; i < readCnt; i++) {
-				bufR[pointer + i] = ucharp[i];
-				bufL[pointer + i] = ucharp[i];
+			for (i = 0; i < readCnt; pointer++, i++) {
+				bufR[pointer] = ucharp[i];
+				bufL[pointer] = ucharp[i];
 			}
 		}
 		else if (NumChannels == 1 && BytesPerSample == 2) {
-			for (i = 0; i < readCnt; i++) {
-				bufR[pointer + i] = shortp[i];
-				bufL[pointer + i] = shortp[i];
+			for (i = 0; i < readCnt; pointer++, i++) {
+				bufR[pointer] = shortp[i];
+				bufL[pointer] = shortp[i];
 			}
 		}
 		else if (NumChannels == 2 && BytesPerSample == 1) {
-			temp = readCnt >> 1;
-			for (i = 0; i < temp; i++) {
-				bufR[pointer + i] = ucharp[i << 1];
-				bufL[pointer + i] = ucharp[(i << 1) + 1];
+			for (i = 0; i < readCnt; pointer++, i += 2) {
+				bufR[pointer] = ucharp[i];
+				bufL[pointer] = ucharp[i + 1];
 			}
 		}
 		else if (NumChannels == 2 && BytesPerSample == 2) {
-			temp = readCnt >> 1;
-			for (i = 0; i < temp; i++) {
-				bufR[pointer + i] = shortp[i << 1];
-				bufL[pointer + i] = shortp[(i << 1) + 1];
+			for (i = 0; i < readCnt; pointer++, i += 2) {
+				bufR[pointer] = shortp[i];
+				bufL[pointer] = shortp[i + 1];
 			}
 		}
-		pointer += i;
 	}
 
 	return pointer;
