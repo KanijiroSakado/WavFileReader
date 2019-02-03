@@ -13,7 +13,6 @@ using namespace kingyo;
 void example() {
 
 	unsigned char buf[44100];
-	
 	WavFileReader wfr("test.wav");
 	
 	wfr.Read(buf, 44100);
