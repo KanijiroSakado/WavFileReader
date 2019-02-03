@@ -42,15 +42,20 @@ void advanced_example() {
 //If the format is Stereo, the file pointer will jump to (first arg)*2 samples ahead
 	wfr.Seek(100000, WAV_SEEK_CUR);
 
-
 //Read() function and ReadLR() function has several overloads
 //unsigned char, signed short, int, double, float are available
 	int *bufInt = (int*)malloc(sizeof(int) * 44100);
 	double *bufDouble = (double*)malloc(sizeof(double) * 44100);
-
+	
 	wfr.Read(bufInt, 44100);
 	wfr.Read(bufDouble, 44100);
 
+//You can learn some format information 
+	int v1 = wfr.NumChannels
+	int v2 = wfr.SampleRate
+	int v3 = wfr.BitsPerSample
+	
+		
 	free(bufL);
 	free(bufR);
 	free(bufInt);
