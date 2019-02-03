@@ -1,5 +1,5 @@
 # WavFileReader
-A simple WAV file reader(loader) in C++.
+A simple and easy WAV file reader(loader) in C++.
 
   
 ## How To Use
