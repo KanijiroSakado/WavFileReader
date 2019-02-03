@@ -9,7 +9,7 @@
 #define WAV_SEEK_CUR SEEK_CUR
 #define WAV_SEEK_END SEEK_END
 
-namespace gs {
+namespace goldsakana {
 
 	class WavFileReader {
 
