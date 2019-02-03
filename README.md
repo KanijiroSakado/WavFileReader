@@ -11,7 +11,6 @@ The way of using it is very similar to  `fread()` function in `stdio.h` or `cstd
 using namespace kingyo;
 
 void example() {
-
 	unsigned char buf[44100];
 	WavFileReader wfr("test.wav");
 	
