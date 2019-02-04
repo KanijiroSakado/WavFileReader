@@ -1,14 +1,12 @@
 #include"wav_file_reader.h"
 #include<cstdlib>
 
-//namespace necessary
-using namespace gold;
 
 void example() {
 
 	unsigned char buf[44100];
 	
-	WavFileReader wfr("test.wav");
+	gold::WavFileReader wfr("test.wav");
 
 //Load first 44100 samples to buf
 //Be aware that second arg is not a size but a count of elements
@@ -26,7 +24,7 @@ void advanced_example() {
 
 //The performance will be better if the second arg of the constructor is set to the same value as which is used when loading  
 //The arg is related to the size of the internal buffer
-	WavFileReader wfr("test.wav",1000);
+	gold::WavFileReader wfr("test.wav",1000);
 
 //You can also load left and right data separately
 //If the format is Mono, same values will be loaded to bufL and bufR
