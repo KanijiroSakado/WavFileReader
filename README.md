@@ -8,11 +8,10 @@ A simple and easy WAV file reader(loader) in C++.
 The way of using it is very similar to  `fread()` function in `stdio.h` or `cstdio`.  
 ```
 #include"wav_file_reader.h"
-using namespace gold;
 
 void example() {
 	unsigned char buf[44100];
-	WavFileReader wfr("test.wav");
+	gold::WavFileReader wfr("test.wav");
 	
 	wfr.Read(buf, 44100);
 
