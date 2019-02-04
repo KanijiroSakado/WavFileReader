@@ -25,6 +25,7 @@ See `sample.cpp` for more details.
 * `WavFileReader.Read()` function has several overloads that accept different data types. Convenient isn't it?
 * Loaded data will be automatically converted and rescaled from signed 16bit to unsigned 8bit by `WavFileReader.Read()` function ONLY WHEN the WAV format is 16bit and the prepared buffer is 8bit.
 * `WavFileReader.Read()` function automatically adds and halves left and right channels if the format is Stereo. You can use `WavFileReader.ReadLR()` function if you want to load channels separately.
+* You can access to some WAV format information via instance variable.
 * `WavFileReader()` constructor throws WFRException object defined in `wav_file_reader.h` when some exception occured.
 * Second arg of `WavFileReader.Read()` function is not a size of the data but a count of elements of the data.
 * `WavFileReader.Read()` function returns (the total number of samples successfully read)/(NumChannels). Use it to check EOF.
