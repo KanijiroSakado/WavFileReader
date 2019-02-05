@@ -2,10 +2,9 @@
 A simple and easy WAV file reader(loader) in C++.
 
 ## What You Can Do
-* Loading Mono PCM data
-* Loading Stereo PCM data
+* Loading Mono and Stereo PCM data
 * Loading data from random point in the file
-* Get WAV format information
+* Get WAV format information of the file
 
 ## How To Use
 1. Include `wav_file_reader.h`.  
