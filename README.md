@@ -2,7 +2,7 @@
 A simple and easy WAV file reader(loader) in C++.
 
 ## How To Use
-1. Include source files.  
+1. Include `wav_file_reader.h`.  
 1. Create `gold::WavFileReader` object and use `WavFileReader.Read()` function to read data from WAV file.  
 
 The way of using it is very similar to  `fread()` function in `stdio.h` or `cstdio`.  
