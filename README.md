@@ -22,13 +22,16 @@ See `sample.cpp` for more details.
 
 ## Examples
 
+### Initialize
+```
+	gold::WavFileReader wfr("test.wav");
+```
+
 ### Loading Data
 
 ```
 	unsigned char buf[44100];
-
-	gold::WavFileReader wfr("test.wav");
-
+	
 //Load first 44100 samples to buf
 //Be aware that second arg is not a size but a count of elements
 //Loaded values will be (L+R)/2 if the WAV format is Stereo Channels 
@@ -44,8 +47,6 @@ See `sample.cpp` for more details.
 	unsigned char bufL[1000];
 	unsigned char bufR[1000];
 
-	gold::WavFileReader wfr("test.wav");
-
 //You can also load left and right data separately
 //If the format is Mono, same values will be loaded to bufL and bufR
 	wfr.ReadLR(bufL, bufR, 1000);
@@ -53,8 +54,6 @@ See `sample.cpp` for more details.
 
 ### Seek in the File
 ```
-	gold::WavFileReader wfr("test.wav");
-
 //You can use WavFileReader.Seek() function like fseek() function in stdio.h or cstdio
 //The first arg is not a bytes-based size but a samples-based size
 //If the format is Stereo, the file pointer will jump to (first arg)*2 samples ahead
@@ -66,8 +65,6 @@ See `sample.cpp` for more details.
 	int bufInt[1000];
 	double bufDouble[1000];
 	
-	gold::WavFileReader wfr("test.wav");
-	
 //Read() function and ReadLR() function has several overloads
 //unsigned char, signed short, int, double, float are available
 	wfr.Read(bufInt, 1000);
@@ -76,8 +73,6 @@ See `sample.cpp` for more details.
 
 ### WAV Format Information
 ```
-	gold::WavFileReader wfr("test.wav");
-
 //You can access to some format information 
 	int v1 = wfr.NumChannels
 	int v2 = wfr.SampleRate
