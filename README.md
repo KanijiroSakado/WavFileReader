@@ -38,7 +38,7 @@ See `sample.cpp` for more details.
 	wfr.Read(buf, 44100);
 ```
 
-### Loading Left and Right Data Seperately
+### Loading Left and Right Data Separately
 
 ```
 	unsigned char bufL[1000];
