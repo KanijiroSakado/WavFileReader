@@ -46,7 +46,7 @@ void advanced_example() {
 	wfr.Read(bufInt, 1000);
 	wfr.Read(bufDouble, 1000);
 
-//You can learn some format information 
+//You can access to some format information 
 	int v1 = wfr.NumChannels
 	int v2 = wfr.SampleRate
 	int v3 = wfr.BitsPerSample
