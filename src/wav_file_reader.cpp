@@ -65,9 +65,9 @@ namespace gold {
 		}
 
 		
-		gpbuf = (unsigned char*)malloc(BytesPerSample * gpBufCnt * NumChannels);
-		ucharp = (unsigned char*)gpbuf;
-		shortp = (signed short int*)gpbuf;
+		gpBuf = (unsigned char*)malloc(BytesPerSample * gpBufCnt * NumChannels);
+		ucharp = (unsigned char*)gpBuf;
+		shortp = (signed short int*)gpBuf;
 
 		return;
 	}
@@ -82,7 +82,7 @@ namespace gold {
 
 	WavFileReader::~WavFileReader() {
 		fclose(fp);
-		free(gpbuf);
+		free(gpBuf);
 	}
 
 	int WavFileReader::Read(unsigned char *buf, unsigned int leftToRead) {
@@ -101,7 +101,7 @@ namespace gold {
 				leftToRead -= gpBufCnt;
 			}
 
-			numSuccess = fread(gpbuf, BytesPerSample, readCnt, fp);
+			numSuccess = fread(gpBuf, BytesPerSample, readCnt, fp);
 
 			if (numSuccess < readCnt) {
 				readCnt = numSuccess;
@@ -149,7 +149,7 @@ namespace gold {
 				leftToRead -= gpBufCnt;
 			}
 
-			numSuccess = fread(gpbuf, BytesPerSample, readCnt, fp);
+			numSuccess = fread(gpBuf, BytesPerSample, readCnt, fp);
 
 			if (numSuccess < readCnt) {
 				readCnt = numSuccess;
@@ -196,7 +196,7 @@ namespace gold {
 				leftToRead -= gpBufCnt;
 			}
 
-			numSuccess = fread(gpbuf, BytesPerSample, readCnt, fp);
+			numSuccess = fread(gpBuf, BytesPerSample, readCnt, fp);
 
 			if (numSuccess < readCnt) {
 				readCnt = numSuccess;
@@ -244,7 +244,7 @@ namespace gold {
 				leftToRead -= gpBufCnt;
 			}
 
-			numSuccess = fread(gpbuf, BytesPerSample, readCnt, fp);
+			numSuccess = fread(gpBuf, BytesPerSample, readCnt, fp);
 
 			if (numSuccess < readCnt) {
 				readCnt = numSuccess;
@@ -292,7 +292,7 @@ namespace gold {
 				leftToRead -= gpBufCnt;
 			}
 
-			numSuccess = fread(gpbuf, BytesPerSample, readCnt, fp);
+			numSuccess = fread(gpBuf, BytesPerSample, readCnt, fp);
 
 			if (numSuccess < readCnt) {
 				readCnt = numSuccess;
@@ -340,7 +340,7 @@ namespace gold {
 				leftToRead -= gpBufCnt;
 			}
 
-			numSuccess = fread(gpbuf, BytesPerSample, readCnt, fp);
+			numSuccess = fread(gpBuf, BytesPerSample, readCnt, fp);
 
 			if (numSuccess < readCnt) {
 				readCnt = numSuccess;
@@ -391,7 +391,7 @@ namespace gold {
 				leftToRead -= gpBufCnt;
 			}
 
-			numSuccess = fread(gpbuf, BytesPerSample, readCnt, fp);
+			numSuccess = fread(gpBuf, BytesPerSample, readCnt, fp);
 
 			if (numSuccess < readCnt) {
 				readCnt = numSuccess;
@@ -442,7 +442,7 @@ namespace gold {
 				leftToRead -= gpBufCnt;
 			}
 
-			numSuccess = fread(gpbuf, BytesPerSample, readCnt, fp);
+			numSuccess = fread(gpBuf, BytesPerSample, readCnt, fp);
 
 			if (numSuccess < readCnt) {
 				readCnt = numSuccess;
@@ -494,7 +494,7 @@ namespace gold {
 				leftToRead -= gpBufCnt;
 			}
 
-			numSuccess = fread(gpbuf, BytesPerSample, readCnt, fp);
+			numSuccess = fread(gpBuf, BytesPerSample, readCnt, fp);
 
 			if (numSuccess < readCnt) {
 				readCnt = numSuccess;
@@ -546,7 +546,7 @@ namespace gold {
 				leftToRead -= gpBufCnt;
 			}
 
-			numSuccess = fread(gpbuf, BytesPerSample, readCnt, fp);
+			numSuccess = fread(gpBuf, BytesPerSample, readCnt, fp);
 
 			if (numSuccess < readCnt) {
 				readCnt = numSuccess;
