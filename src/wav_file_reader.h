@@ -45,7 +45,7 @@ namespace gold {
 	private:
 		FILE* fp;
 		int gpBufCnt;//count of general purpose buf = total buf size / BlockAlign
-		void *gpbuf;
+		void *gpBuf;
 		void WavFileReaderPrivate(const char*filename);
 
 	};
