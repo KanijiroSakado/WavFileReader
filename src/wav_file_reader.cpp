@@ -64,13 +64,8 @@ namespace gold {
 			throw WFRFileValidityException();
 		}
 
-		if (BytesPerSample == 1) {
-			gpbuf = (unsigned char*)malloc(sizeof(unsigned char) * gpBufCnt * NumChannels);
-		}
-		else {
-			gpbuf = (signed short*)malloc(sizeof(signed short) * gpBufCnt * NumChannels);
-		}
-
+		
+		gpbuf = (unsigned char*)malloc(BytesPerSample * gpBufCnt * NumChannels);
 		ucharp = (unsigned char*)gpbuf;
 		shortp = (signed short int*)gpbuf;
 
