@@ -22,7 +22,7 @@ void example() {
 
 void advanced_example() {
 
-//The performance will be better if the second arg of the constructor is set to the same value as which is used when loading  
+//The performance will be the best if the second arg of the constructor is set to the same value as which is used when loading  
 //The arg is related to the size of the internal buffer
 	gold::WavFileReader wfr("test.wav",1000);
 
