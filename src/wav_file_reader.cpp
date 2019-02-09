@@ -20,6 +20,7 @@ namespace gold {
 	void WavFileReader::WavFileReaderPrivate(const char*filename) {
 
 		char ch[5];
+		unsigned int u;
 
 		fp = fopen(filename, "rb");
 		if (fp == NULL) {
@@ -50,17 +51,15 @@ namespace gold {
 		fread(&BlockAlign, 2, 1, fp);
 		fread(&BitsPerSample, 2, 1, fp);
 		fseek(fp, FmtSize - 16, SEEK_CUR);
-		do {
-			ch[0] = ch[1];
-			ch[1] = ch[2];
-			ch[2] = ch[3];
-			ch[3] = fgetc(fp);
-			ch[4] = '\0';
-			if (ch[3] == EOF) {
+		fread(ch, 1, 4, fp);
+		while (strcmp(ch, "data")) {
+			if (fread(&u, 4, 1, fp) != 1) {
 				fclose(fp);
 				throw WFRFileValidityException();
 			}
-		} while (strcmp(ch, "data"));
+			fseek(fp, u, SEEK_CUR);
+			fread(ch, 1, 4, fp);
+		}
 		fread(&DataSize, 4, 1, fp);
 		BytesPerSample = BitsPerSample / 8;
 		NumData = DataSize / BlockAlign;
