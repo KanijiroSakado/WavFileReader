@@ -574,13 +574,13 @@ namespace gold {
 	}
 
 	int WavFileReader::Seek(long offset, int origin) {
-		if (ftell(fp) + offset * BlockAlign < (20 + FmtSize)) {
-			fseek(fp, 20 + FmtSize, origin);
+		if ((long)dataCnt < (-1) * offset) {
+			fseek(fp, (-1) * dataCnt * BlockAlign, origin);
 			dataCnt = 0;
 			return 1;
 		}
-		if (ftell(fp) + offset * BlockAlign > 20 + FmtSize + DataSize) {
-			fseek(fp, 20 + FmtSize + DataSize, origin);
+		if((long)dataCnt + offset > NumData){
+			fseek(fp, (NumData-dataCnt)*BlockAlign, origin);
 			dataCnt = NumData;
 			return 1;
 		}

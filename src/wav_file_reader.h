@@ -45,7 +45,7 @@ namespace gold {
 
 	private:
 		FILE* fp;
-		int numGpBuf;//count of general purpose buf = total buf size / BlockAlign
+		unsigned int numGpBuf;//count of general purpose buf = total buf size / BlockAlign
 		void *gpBuf;
 		unsigned int dataCnt;
 		unsigned char *ucharp;
