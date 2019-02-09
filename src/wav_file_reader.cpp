@@ -101,7 +101,6 @@ namespace gold {
 			}
 
 			numSuccess = fread(gpBuf, BytesPerSample, readCnt, fp);
-
 			if (numSuccess < readCnt) leftToRead = 0;
 
 			if (NumChannels == 1 && BytesPerSample == 1) {
@@ -145,7 +144,6 @@ namespace gold {
 			}
 
 			numSuccess = fread(gpBuf, BytesPerSample, readCnt, fp);
-
 			if (numSuccess < readCnt) leftToRead = 0;
 
 			if (NumChannels == 1 && BytesPerSample == 1) {
@@ -189,7 +187,6 @@ namespace gold {
 			}
 
 			numSuccess = fread(gpBuf, BytesPerSample, readCnt, fp);
-
 			if (numSuccess < readCnt) leftToRead = 0;
 
 			if (NumChannels == 1 && BytesPerSample == 1) {
@@ -234,7 +231,6 @@ namespace gold {
 			}
 
 			numSuccess = fread(gpBuf, BytesPerSample, readCnt, fp);
-
 			if (numSuccess < readCnt) leftToRead = 0;
 
 			if (NumChannels == 1 && BytesPerSample == 1) {
@@ -279,7 +275,6 @@ namespace gold {
 			}
 
 			numSuccess = fread(gpBuf, BytesPerSample, readCnt, fp);
-
 			if (numSuccess < readCnt) leftToRead = 0;
 
 			if (NumChannels == 1 && BytesPerSample == 1) {
@@ -324,7 +319,6 @@ namespace gold {
 			}
 
 			numSuccess = fread(gpBuf, BytesPerSample, readCnt, fp);
-
 			if (numSuccess < readCnt) leftToRead = 0;
 
 			if (NumChannels == 1 && BytesPerSample == 1) {
@@ -372,7 +366,6 @@ namespace gold {
 			}
 
 			numSuccess = fread(gpBuf, BytesPerSample, readCnt, fp);
-
 			if (numSuccess < readCnt) leftToRead = 0;
 
 			if (NumChannels == 1 && BytesPerSample == 1) {
@@ -420,7 +413,6 @@ namespace gold {
 			}
 
 			numSuccess = fread(gpBuf, BytesPerSample, readCnt, fp);
-
 			if (numSuccess < readCnt) leftToRead = 0;
 
 			if (NumChannels == 1 && BytesPerSample == 1) {
@@ -469,7 +461,6 @@ namespace gold {
 			}
 
 			numSuccess = fread(gpBuf, BytesPerSample, readCnt, fp);
-
 			if (numSuccess < readCnt) leftToRead = 0;
 
 			if (NumChannels == 1 && BytesPerSample == 1) {
@@ -518,7 +509,6 @@ namespace gold {
 			}
 
 			numSuccess = fread(gpBuf, BytesPerSample, readCnt, fp);
-
 			if (numSuccess < readCnt) leftToRead = 0;
 
 			if (NumChannels == 1 && BytesPerSample == 1) {
