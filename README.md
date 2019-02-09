@@ -25,7 +25,7 @@ void example() {
 ```
 See `sample.cpp` for more details.
 
-## Notice
+## Note
 * Supported WAV format are 8bit and 16bit.
 * `Read()` function has several overloads that accept different data types. Convenient isn't it?
 * Second arg of `Read()` function is not a size of the data but a count of elements of the data.
