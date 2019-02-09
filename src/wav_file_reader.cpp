@@ -109,7 +109,7 @@ namespace gold {
 			}
 			else if (NumChannels == 1 && BytesPerSample == 2) {
 				for (i = 0; i < numSuccess; pointer++, i++) {
-					buf[pointer] = (unsigned int)((int)shortp[i] + 0x8fff) >> 9;
+					buf[pointer] = (unsigned int)((int)shortp[i] + 0x8000) >> 9;
 				}
 			}
 			else if (NumChannels == 2 && BytesPerSample == 1) {
@@ -119,7 +119,7 @@ namespace gold {
 			}
 			else if (NumChannels == 2 && BytesPerSample == 2) {
 				for (i = 0; i < numSuccess; pointer++, i += 2) {
-					buf[pointer] = (unsigned int)((int)shortp[i] + (int)shortp[i + 1] + 0xffff) >> 9;
+					buf[pointer] = (unsigned int)((int)shortp[i] + (int)shortp[i + 1] + 0x10000) >> 9;
 				}
 			}
 		}
@@ -328,8 +328,8 @@ namespace gold {
 			}
 			else if (NumChannels == 1 && BytesPerSample == 2) {
 				for (i = 0; i < numSuccess; pointer++, i++) {
-					bufR[pointer] = (unsigned int)((int)shortp[i] + 0x8fff) >> 8;
-					bufL[pointer] = (unsigned int)((int)shortp[i] + 0x8fff) >> 8;
+					bufR[pointer] = (unsigned int)((int)shortp[i] + 0x8000) >> 8;
+					bufL[pointer] = (unsigned int)((int)shortp[i] + 0x8000) >> 8;
 				}
 			}
 			else if (NumChannels == 2 && BytesPerSample == 1) {
@@ -340,8 +340,8 @@ namespace gold {
 			}
 			else if (NumChannels == 2 && BytesPerSample == 2) {
 				for (i = 0; i < numSuccess; pointer++, i += 2) {
-					bufR[pointer] = ((int)shortp[i] + 0x8fff) >> 8;
-					bufL[pointer] = ((int)shortp[i + 1] + 0x8fff) >> 8;
+					bufR[pointer] = ((int)shortp[i] + 0x8000) >> 8;
+					bufL[pointer] = ((int)shortp[i + 1] + 0x8000) >> 8;
 				}
 			}
 		}
