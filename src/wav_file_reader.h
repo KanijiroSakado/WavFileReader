@@ -20,6 +20,7 @@ namespace gold {
 		unsigned short BitsPerSample;
 		unsigned int DataSize;
 		unsigned short BytesPerSample;
+		unsigned int NumData;
 
 
 		WavFileReader(const char* filename);
@@ -44,9 +45,12 @@ namespace gold {
 
 	private:
 		FILE* fp;
-		int gpBufCnt;//count of general purpose buf = total buf size / BlockAlign
+		int numGpBuf;//count of general purpose buf = total buf size / BlockAlign
 		void *gpBuf;
-		void WavFileReaderPrivate(const char*filename);
+		unsigned int dataCnt;
+		unsigned char *ucharp;
+		signed short int *shortp;
+		void WavFileReaderPrivate(const char *filename);
 
 	};
 

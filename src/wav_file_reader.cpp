@@ -8,12 +8,12 @@ namespace gold {
 
 
 	WavFileReader::WavFileReader(const char* filename, unsigned int gpBufCnt) {
-		this->gpBufCnt = gpBufCnt;
+		this->numGpBuf = gpBufCnt;
 		WavFileReaderPrivate(filename);
 	}
 
 	WavFileReader::WavFileReader(const char*filename) {
-		gpBufCnt = 44100;//default
+		numGpBuf = 44100;//default
 		WavFileReaderPrivate(filename);
 	}
 
@@ -50,9 +50,20 @@ namespace gold {
 		fread(&BlockAlign, 2, 1, fp);
 		fread(&BitsPerSample, 2, 1, fp);
 		fseek(fp, FmtSize - 16, SEEK_CUR);
-		fseek(fp, 4, SEEK_CUR);
+		do {
+			ch[0] = ch[1];
+			ch[1] = ch[2];
+			ch[2] = ch[3];
+			ch[3] = fgetc(fp);
+			ch[4] = '\0';
+			if (ch[3] == EOF) {
+				fclose(fp);
+				throw WFRFileValidityException();
+			}
+		} while (strcmp(ch, "data"));
 		fread(&DataSize, 4, 1, fp);
 		BytesPerSample = BitsPerSample / 8;
+		NumData = DataSize / BlockAlign;
 
 		if (BitsPerSample != 8 && BitsPerSample != 16) {
 			fclose(fp);
@@ -64,7 +75,9 @@ namespace gold {
 			throw WFRFileValidityException();
 		}
 
-		gpBuf = (unsigned char*)malloc(BytesPerSample * gpBufCnt * NumChannels);
+		dataCnt = 0;
+
+		gpBuf = (unsigned char*)malloc(BytesPerSample * numGpBuf * NumChannels);
 		ucharp = (unsigned char*)gpBuf;
 		shortp = (signed short int*)gpBuf;
 
@@ -88,16 +101,17 @@ namespace gold {
 
 		unsigned int readCnt, numSuccess, i = 0, pointer = 0;
 
-		readCnt = gpBufCnt * NumChannels;
+		if (dataCnt + leftToRead > NumData)leftToRead = NumData - dataCnt;
+		readCnt = numGpBuf * NumChannels;
 
 		while (leftToRead > 0) {
 
-			if (leftToRead < gpBufCnt) {
+			if (leftToRead < numGpBuf) {
 				readCnt = leftToRead * NumChannels;
 				leftToRead = 0;
 			}
 			else {
-				leftToRead -= gpBufCnt;
+				leftToRead -= numGpBuf;
 			}
 
 			numSuccess = fread(gpBuf, BytesPerSample, readCnt, fp);
@@ -124,6 +138,7 @@ namespace gold {
 			}
 		}
 
+		dataCnt += pointer;
 		return pointer;
 	}
 
@@ -131,16 +146,17 @@ namespace gold {
 
 		unsigned int readCnt, numSuccess, i = 0, pointer = 0;
 
-		readCnt = gpBufCnt * NumChannels;
+		if (dataCnt + leftToRead > NumData)leftToRead = NumData - dataCnt;
+		readCnt = numGpBuf * NumChannels;
 
 		while (leftToRead > 0) {
 
-			if (leftToRead < gpBufCnt) {
+			if (leftToRead < numGpBuf) {
 				readCnt = leftToRead * NumChannels;
 				leftToRead = 0;
 			}
 			else {
-				leftToRead -= gpBufCnt;
+				leftToRead -= numGpBuf;
 			}
 
 			numSuccess = fread(gpBuf, BytesPerSample, readCnt, fp);
@@ -167,6 +183,7 @@ namespace gold {
 			}
 		}
 
+		dataCnt += pointer;
 		return pointer;
 	}
 
@@ -174,16 +191,17 @@ namespace gold {
 
 		unsigned int readCnt, numSuccess, i = 0, pointer = 0;
 
-		readCnt = gpBufCnt * NumChannels;
+		if (dataCnt + leftToRead > NumData)leftToRead = NumData - dataCnt;
+		readCnt = numGpBuf * NumChannels;
 
 		while (leftToRead > 0) {
 
-			if (leftToRead < gpBufCnt) {
+			if (leftToRead < numGpBuf) {
 				readCnt = leftToRead * NumChannels;
 				leftToRead = 0;
 			}
 			else {
-				leftToRead -= gpBufCnt;
+				leftToRead -= numGpBuf;
 			}
 
 			numSuccess = fread(gpBuf, BytesPerSample, readCnt, fp);
@@ -211,6 +229,7 @@ namespace gold {
 			}
 		}
 
+		dataCnt += pointer;
 		return pointer;
 	}
 
@@ -218,16 +237,17 @@ namespace gold {
 
 		unsigned int readCnt, numSuccess, i = 0, pointer = 0;
 
-		readCnt = gpBufCnt * NumChannels;
+		if (dataCnt + leftToRead > NumData)leftToRead = NumData - dataCnt;
+		readCnt = numGpBuf * NumChannels;
 
 		while (leftToRead > 0) {
 
-			if (leftToRead < gpBufCnt) {
+			if (leftToRead < numGpBuf) {
 				readCnt = leftToRead * NumChannels;
 				leftToRead = 0;
 			}
 			else {
-				leftToRead -= gpBufCnt;
+				leftToRead -= numGpBuf;
 			}
 
 			numSuccess = fread(gpBuf, BytesPerSample, readCnt, fp);
@@ -255,6 +275,7 @@ namespace gold {
 			}
 		}
 
+		dataCnt += pointer;
 		return pointer;
 	}
 
@@ -262,16 +283,17 @@ namespace gold {
 
 		unsigned int readCnt, numSuccess, i = 0, pointer = 0;
 
-		readCnt = gpBufCnt * NumChannels;
+		if (dataCnt + leftToRead > NumData)leftToRead = NumData - dataCnt;
+		readCnt = numGpBuf * NumChannels;
 
 		while (leftToRead > 0) {
 
-			if (leftToRead < gpBufCnt) {
+			if (leftToRead < numGpBuf) {
 				readCnt = leftToRead * NumChannels;
 				leftToRead = 0;
 			}
 			else {
-				leftToRead -= gpBufCnt;
+				leftToRead -= numGpBuf;
 			}
 
 			numSuccess = fread(gpBuf, BytesPerSample, readCnt, fp);
@@ -299,6 +321,7 @@ namespace gold {
 			}
 		}
 
+		dataCnt += pointer;
 		return pointer;
 	}
 
@@ -306,46 +329,48 @@ namespace gold {
 
 		unsigned int readCnt, numSuccess, i = 0, pointer = 0;
 
-		readCnt = gpBufCnt * NumChannels;
+		if (dataCnt + leftToRead > NumData)leftToRead = NumData - dataCnt;
+		readCnt = numGpBuf * NumChannels;
 
 		while (leftToRead > 0) {
 
-			if (leftToRead < gpBufCnt) {
+			if (leftToRead < numGpBuf) {
 				readCnt = leftToRead * NumChannels;
 				leftToRead = 0;
 			}
 			else {
-				leftToRead -= gpBufCnt;
+				leftToRead -= numGpBuf;
 			}
 
 			numSuccess = fread(gpBuf, BytesPerSample, readCnt, fp);
 			if (numSuccess < readCnt) leftToRead = 0;
 
 			if (NumChannels == 1 && BytesPerSample == 1) {
-				memcpy(bufR + pointer, ucharp, numSuccess);
 				memcpy(bufL + pointer, ucharp, numSuccess);
+				memcpy(bufR + pointer, ucharp, numSuccess);
 				pointer += numSuccess;
 			}
 			else if (NumChannels == 1 && BytesPerSample == 2) {
 				for (i = 0; i < numSuccess; pointer++, i++) {
-					bufR[pointer] = (unsigned int)((int)shortp[i] + 0x8000) >> 8;
 					bufL[pointer] = (unsigned int)((int)shortp[i] + 0x8000) >> 8;
+					bufR[pointer] = (unsigned int)((int)shortp[i] + 0x8000) >> 8;
 				}
 			}
 			else if (NumChannels == 2 && BytesPerSample == 1) {
 				for (i = 0; i < numSuccess; pointer++, i += 2) {
-					bufR[pointer] = ucharp[i];
-					bufL[pointer] = ucharp[i + 1];
+					bufL[pointer] = ucharp[i];
+					bufR[pointer] = ucharp[i + 1];
 				}
 			}
 			else if (NumChannels == 2 && BytesPerSample == 2) {
 				for (i = 0; i < numSuccess; pointer++, i += 2) {
-					bufR[pointer] = ((int)shortp[i] + 0x8000) >> 8;
-					bufL[pointer] = ((int)shortp[i + 1] + 0x8000) >> 8;
+					bufL[pointer] = ((int)shortp[i] + 0x8000) >> 8;
+					bufR[pointer] = ((int)shortp[i + 1] + 0x8000) >> 8;
 				}
 			}
 		}
 
+		dataCnt += pointer;
 		return pointer;
 	}
 
@@ -353,16 +378,17 @@ namespace gold {
 
 		unsigned int readCnt, numSuccess, i = 0, pointer = 0;
 
-		readCnt = gpBufCnt * NumChannels;
+		if (dataCnt + leftToRead > NumData)leftToRead = NumData - dataCnt;
+		readCnt = numGpBuf * NumChannels;
 
 		while (leftToRead > 0) {
 
-			if (leftToRead < gpBufCnt) {
+			if (leftToRead < numGpBuf) {
 				readCnt = leftToRead * NumChannels;
 				leftToRead = 0;
 			}
 			else {
-				leftToRead -= gpBufCnt;
+				leftToRead -= numGpBuf;
 			}
 
 			numSuccess = fread(gpBuf, BytesPerSample, readCnt, fp);
@@ -370,29 +396,30 @@ namespace gold {
 
 			if (NumChannels == 1 && BytesPerSample == 1) {
 				for (i = 0; i < numSuccess; pointer++, i++) {
-					bufR[pointer] = ucharp[i];
 					bufL[pointer] = ucharp[i];
+					bufR[pointer] = ucharp[i];
 				}
 			}
 			else if (NumChannels == 1 && BytesPerSample == 2) {
-				memcpy(bufR + pointer, shortp, numSuccess);
 				memcpy(bufL + pointer, shortp, numSuccess);
+				memcpy(bufR + pointer, shortp, numSuccess);
 				pointer += numSuccess;
 			}
 			else if (NumChannels == 2 && BytesPerSample == 1) {
 				for (i = 0; i < numSuccess; pointer++, i += 2) {
-					bufR[pointer] = ucharp[i];
-					bufL[pointer] = ucharp[i + 1];
+					bufL[pointer] = ucharp[i];
+					bufR[pointer] = ucharp[i + 1];
 				}
 			}
 			else if (NumChannels == 2 && BytesPerSample == 2) {
 				for (i = 0; i < numSuccess; pointer++, i += 2) {
-					bufR[pointer] = shortp[i];
-					bufL[pointer] = shortp[i + 1];
+					bufL[pointer] = shortp[i];
+					bufR[pointer] = shortp[i + 1];
 				}
 			}
 		}
 
+		dataCnt += pointer;
 		return pointer;
 	}
 
@@ -400,16 +427,17 @@ namespace gold {
 
 		unsigned int readCnt, numSuccess, i = 0, pointer = 0;
 
-		readCnt = gpBufCnt * NumChannels;
+		if (dataCnt + leftToRead > NumData)leftToRead = NumData - dataCnt;
+		readCnt = numGpBuf * NumChannels;
 
 		while (leftToRead > 0) {
 
-			if (leftToRead < gpBufCnt) {
+			if (leftToRead < numGpBuf) {
 				readCnt = leftToRead * NumChannels;
 				leftToRead = 0;
 			}
 			else {
-				leftToRead -= gpBufCnt;
+				leftToRead -= numGpBuf;
 			}
 
 			numSuccess = fread(gpBuf, BytesPerSample, readCnt, fp);
@@ -417,30 +445,31 @@ namespace gold {
 
 			if (NumChannels == 1 && BytesPerSample == 1) {
 				for (i = 0; i < numSuccess; pointer++, i++) {
-					bufR[pointer] = ucharp[i];
 					bufL[pointer] = ucharp[i];
+					bufR[pointer] = ucharp[i];
 				}
 			}
 			else if (NumChannels == 1 && BytesPerSample == 2) {
 				for (i = 0; i < numSuccess; pointer++, i++) {
-					bufR[pointer] = shortp[i];
 					bufL[pointer] = shortp[i];
+					bufR[pointer] = shortp[i];
 				}
 			}
 			else if (NumChannels == 2 && BytesPerSample == 1) {
 				for (i = 0; i < numSuccess; pointer++, i += 2) {
-					bufR[pointer] = ucharp[i];
-					bufL[pointer] = ucharp[i + 1];
+					bufL[pointer] = ucharp[i];
+					bufR[pointer] = ucharp[i + 1];
 				}
 			}
 			else if (NumChannels == 2 && BytesPerSample == 2) {
 				for (i = 0; i < numSuccess; pointer++, i += 2) {
-					bufR[pointer] = shortp[i];
-					bufL[pointer] = shortp[i + 1];
+					bufL[pointer] = shortp[i];
+					bufR[pointer] = shortp[i + 1];
 				}
 			}
 		}
 
+		dataCnt += pointer;
 		return pointer;
 	}
 
@@ -448,16 +477,17 @@ namespace gold {
 
 		unsigned int readCnt, numSuccess, i = 0, pointer = 0;
 
-		readCnt = gpBufCnt * NumChannels;
+		if (dataCnt + leftToRead > NumData)leftToRead = NumData - dataCnt;
+		readCnt = numGpBuf * NumChannels;
 
 		while (leftToRead > 0) {
 
-			if (leftToRead < gpBufCnt) {
+			if (leftToRead < numGpBuf) {
 				readCnt = leftToRead * NumChannels;
 				leftToRead = 0;
 			}
 			else {
-				leftToRead -= gpBufCnt;
+				leftToRead -= numGpBuf;
 			}
 
 			numSuccess = fread(gpBuf, BytesPerSample, readCnt, fp);
@@ -465,30 +495,31 @@ namespace gold {
 
 			if (NumChannels == 1 && BytesPerSample == 1) {
 				for (i = 0; i < numSuccess; pointer++, i++) {
-					bufR[pointer] = ucharp[i];
 					bufL[pointer] = ucharp[i];
+					bufR[pointer] = ucharp[i];
 				}
 			}
 			else if (NumChannels == 1 && BytesPerSample == 2) {
 				for (i = 0; i < numSuccess; pointer++, i++) {
-					bufR[pointer] = shortp[i];
 					bufL[pointer] = shortp[i];
+					bufR[pointer] = shortp[i];
 				}
 			}
 			else if (NumChannels == 2 && BytesPerSample == 1) {
 				for (i = 0; i < numSuccess; pointer++, i += 2) {
-					bufR[pointer] = ucharp[i];
-					bufL[pointer] = ucharp[i + 1];
+					bufL[pointer] = ucharp[i];
+					bufR[pointer] = ucharp[i + 1];
 				}
 			}
 			else if (NumChannels == 2 && BytesPerSample == 2) {
 				for (i = 0; i < numSuccess; pointer++, i += 2) {
-					bufR[pointer] = shortp[i];
-					bufL[pointer] = shortp[i + 1];
+					bufL[pointer] = shortp[i];
+					bufR[pointer] = shortp[i + 1];
 				}
 			}
 		}
 
+		dataCnt += pointer;
 		return pointer;
 	}
 
@@ -496,16 +527,17 @@ namespace gold {
 
 		unsigned int readCnt, numSuccess, i = 0, pointer = 0;
 
-		readCnt = gpBufCnt * NumChannels;
+		if (dataCnt + leftToRead > NumData)leftToRead = NumData - dataCnt;
+		readCnt = numGpBuf * NumChannels;
 
 		while (leftToRead > 0) {
 
-			if (leftToRead < gpBufCnt) {
+			if (leftToRead < numGpBuf) {
 				readCnt = leftToRead * NumChannels;
 				leftToRead = 0;
 			}
 			else {
-				leftToRead -= gpBufCnt;
+				leftToRead -= numGpBuf;
 			}
 
 			numSuccess = fread(gpBuf, BytesPerSample, readCnt, fp);
@@ -513,34 +545,46 @@ namespace gold {
 
 			if (NumChannels == 1 && BytesPerSample == 1) {
 				for (i = 0; i < numSuccess; pointer++, i++) {
-					bufR[pointer] = ucharp[i];
 					bufL[pointer] = ucharp[i];
+					bufR[pointer] = ucharp[i];
 				}
 			}
 			else if (NumChannels == 1 && BytesPerSample == 2) {
 				for (i = 0; i < numSuccess; pointer++, i++) {
-					bufR[pointer] = shortp[i];
 					bufL[pointer] = shortp[i];
+					bufR[pointer] = shortp[i];
 				}
 			}
 			else if (NumChannels == 2 && BytesPerSample == 1) {
 				for (i = 0; i < numSuccess; pointer++, i += 2) {
-					bufR[pointer] = ucharp[i];
-					bufL[pointer] = ucharp[i + 1];
+					bufL[pointer] = ucharp[i];
+					bufR[pointer] = ucharp[i + 1];
 				}
 			}
 			else if (NumChannels == 2 && BytesPerSample == 2) {
 				for (i = 0; i < numSuccess; pointer++, i += 2) {
-					bufR[pointer] = shortp[i];
-					bufL[pointer] = shortp[i + 1];
+					bufL[pointer] = shortp[i];
+					bufR[pointer] = shortp[i + 1];
 				}
 			}
 		}
 
+		dataCnt += pointer;
 		return pointer;
 	}
 
 	int WavFileReader::Seek(long offset, int origin) {
+		if (ftell(fp) + offset * BlockAlign < (20 + FmtSize)) {
+			fseek(fp, 20 + FmtSize, origin);
+			dataCnt = 0;
+			return 1;
+		}
+		if (ftell(fp) + offset * BlockAlign > 20 + FmtSize + DataSize) {
+			fseek(fp, 20 + FmtSize + DataSize, origin);
+			dataCnt = NumData;
+			return 1;
+		}
+		dataCnt += offset;
 		return fseek(fp, BlockAlign*offset, origin);
 	}
 
