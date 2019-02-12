@@ -20,7 +20,7 @@ namespace gold {
 	void WavFileReader::WavFileReaderPrivate(const char*filename) {
 
 		char ch[5];
-		unsigned int size;
+		unsigned int size;//chunk size
 
 		fp = fopen(filename, "rb");
 		if (fp == NULL) {
