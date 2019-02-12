@@ -21,7 +21,7 @@ https://github.com/GoldSakana/WavFileReader
 	gold::WavFileReader wfr("test.wav");
 ```
 作ってください。名前空間`gold`をお忘れなく。読み込むファイルもここで指定してください。
-　　
+<br/>　　
   
 # 3. `Read()`関数でPCMデータを読み込む
 `int Read(unsigned char *buf, unsigned int count)`
@@ -40,7 +40,7 @@ https://github.com/GoldSakana/WavFileReader
 `Read()`関数には配列ポインタとして`unsigned char*`以外のデータ型を受け取れるオーバーロードが複数あります。具体的には`signed short*`, `int*`, `double*`, `float*`型が受け取れます。
 
 基本的に読み込んだ値は加工されずにそのまま配列に格納されます。しかし読み込み先が`16bit`で受け取り先が`8bit`の場合のみ例外で、そのままでは溢れてしまうので値は自動的に`8bit`に変換されて格納されます。
-　　
+<br/>　　
   
 # 4. コード全体
 以上が最も基本的な使い方です。コードの全体図を以下に示します。
@@ -60,7 +60,7 @@ int main(void) {
 }
 ```
 簡単ですね。
-　　
+<br/>　　
   
 # 5. おまけ
 細かい機能の説明をします。
@@ -121,6 +121,7 @@ C言語の`fseek()`関数とだいたい同じですが、`offset`に指定す�
 	int v2 = wfr.SampleRate
 	int v3 = wfr.BitsPerSample
 ```
-　　
+<br/>
+
 # 6. 最後に
 WavFileReaderは私が自分用に作ったものですが、便利なので他の人にも使ってもらえればという思いでコードを整えて公開致しました。正直言ってgithubに上げるのもQiitaに投稿するのも初めてです。わりと手探りなので至らぬ点があればご容赦願いたいです。改善点などあればご指摘頂ければ幸いです。
