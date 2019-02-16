@@ -51,9 +51,11 @@ void advanced_example() {
 	wfr.Read(bufDouble, 1000);
 
 //You can access to some format information 
-	int v1 = wfr.NumChannels
-	int v2 = wfr.SampleRate
-	int v3 = wfr.BitsPerSample
+	int v1 = wfr.NumChannels;
+	int v2 = wfr.SampleRate;
+	int v3 = wfr.BitsPerSample;
+	int v4 = wfr.DataSize;//Total size of data
+	int v5 = wfr.NumData;//Total number of samples(if Stereo, L and R samples are counted as 1)
 
 	return;
 }
