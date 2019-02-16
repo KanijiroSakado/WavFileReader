@@ -42,7 +42,7 @@ namespace gold {
 		int ReadLR(unsigned char *bufL, unsigned char *bufR, unsigned int count);
 
 		int Seek(long offset, int origin);
-		long Tell();
+		unsigned int Tell();
 
 	private:
 		FILE* fp;
