@@ -573,7 +573,7 @@ namespace gold {
 	}
 
 	int WavFileReader::Seek(long offset, int origin) {
-		if ((long)dataCnt < (-1) * offset) {
+		if ((long)dataCnt < (-1) * offset) {//changed the type of dataCnt from uint to long, so I removed the casting dataCnt to long
 			fseek(fp, (-1) * dataCnt * BlockAlign, origin);
 			dataCnt = 0;
 			return 1;
@@ -585,6 +585,10 @@ namespace gold {
 		}
 		dataCnt += offset;
 		return fseek(fp, BlockAlign*offset, origin);
+	}
+
+	long WavFileReader::Tell() {
+		return (long)dataCnt;
 	}
 
 
