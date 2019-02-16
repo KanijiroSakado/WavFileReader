@@ -588,7 +588,7 @@ namespace gold {
 	}
 
 	unsigned int WavFileReader::Tell() {
-		return (long)dataCnt;
+		return dataCnt;
 	}
 
 
