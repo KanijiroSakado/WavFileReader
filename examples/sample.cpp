@@ -37,7 +37,11 @@ void advanced_example() {
 //The first arg is not a bytes-based size but a samples-based size
 //If the format is Stereo, the file pointer will jump to (first arg)*2 samples ahead
 	wfr.Seek(5000, SEEK_CUR);
-
+	
+//Tell() function is almost same as ftell() function in C language.
+//Return value is sample-based as Seek() function.
+	int v0 = wfr.Tell();
+	
 //Read() function and ReadLR() function has several overloads
 //unsigned char, signed short, int, double, float are available
 	int bufInt[1000];
