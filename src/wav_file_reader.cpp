@@ -587,7 +587,7 @@ namespace gold {
 		return fseek(fp, BlockAlign*offset, origin);
 	}
 
-	unsigned int WavFileReader::Tell() {
+	unsigned long WavFileReader::Tell() {
 		return dataCnt;
 	}
 

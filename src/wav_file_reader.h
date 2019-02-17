@@ -11,16 +11,16 @@ namespace gold {
 	class WavFileReader {
 
 	public:
-		unsigned int FmtSize;
+		unsigned long FmtSize;
 		unsigned short FmtID;
 		unsigned short NumChannels;
-		unsigned int SampleRate;
-		unsigned int BytesPerSec;
+		unsigned long SampleRate;
+		unsigned long BytesPerSec;
 		unsigned short BlockAlign;//(bytes per sample)*(channels)
 		unsigned short BitsPerSample;
-		unsigned int DataSize;
+		unsigned long DataSize;
 		unsigned short BytesPerSample;
-		unsigned int NumData;
+		unsigned long NumData;
 
 
 		WavFileReader(const char* filename);
@@ -42,13 +42,13 @@ namespace gold {
 		int ReadLR(unsigned char *bufL, unsigned char *bufR, unsigned int count);
 
 		int Seek(long offset, int origin);
-		unsigned int Tell();
+		unsigned long Tell();
 
 	private:
 		FILE* fp;
 		unsigned int numGpBuf;//count of general purpose buf = total buf size / BlockAlign
 		void *gpBuf;
-		unsigned int dataCnt;
+		unsigned long dataCnt;
 		unsigned char *ucharp;
 		signed short int *shortp;
 		void WavFileReaderPrivate(const char *filename);
