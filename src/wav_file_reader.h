@@ -50,7 +50,7 @@ namespace gold {
 		void *gpBuf;
 		unsigned long dataCnt;
 		unsigned char *ucharp;
-		signed short int *shortp;
+		signed short *shortp;
 		void WavFileReaderPrivate(const char *filename);
 
 	};

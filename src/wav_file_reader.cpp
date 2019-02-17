@@ -78,7 +78,7 @@ namespace gold {
 
 		gpBuf = (unsigned char*)malloc(BytesPerSample * numGpBuf * NumChannels);
 		ucharp = (unsigned char*)gpBuf;
-		shortp = (signed short int*)gpBuf;
+		shortp = (signed short*)gpBuf;
 
 		return;
 	}
