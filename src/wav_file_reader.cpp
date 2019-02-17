@@ -96,7 +96,7 @@ namespace gold {
 		free(gpBuf);
 	}
 
-	int WavFileReader::Read(unsigned char *buf, unsigned int leftToRead) {
+	unsigned int WavFileReader::Read(unsigned char *buf, unsigned int leftToRead) {
 
 		unsigned int readCnt, numSuccess, i = 0, pointer = 0;
 
@@ -141,7 +141,7 @@ namespace gold {
 		return pointer;
 	}
 
-	int WavFileReader::Read(signed short *buf, unsigned int leftToRead) {
+	unsigned int WavFileReader::Read(signed short *buf, unsigned int leftToRead) {
 
 		unsigned int readCnt, numSuccess, i = 0, pointer = 0;
 
@@ -186,7 +186,7 @@ namespace gold {
 		return pointer;
 	}
 
-	int WavFileReader::Read(int *buf, unsigned int leftToRead) {
+	unsigned int WavFileReader::Read(int *buf, unsigned int leftToRead) {
 
 		unsigned int readCnt, numSuccess, i = 0, pointer = 0;
 
@@ -232,7 +232,7 @@ namespace gold {
 		return pointer;
 	}
 
-	int WavFileReader::Read(double *buf, unsigned int leftToRead) {
+	unsigned int WavFileReader::Read(double *buf, unsigned int leftToRead) {
 
 		unsigned int readCnt, numSuccess, i = 0, pointer = 0;
 
@@ -278,7 +278,7 @@ namespace gold {
 		return pointer;
 	}
 
-	int WavFileReader::Read(float *buf, unsigned int leftToRead) {
+	unsigned int WavFileReader::Read(float *buf, unsigned int leftToRead) {
 
 		unsigned int readCnt, numSuccess, i = 0, pointer = 0;
 
@@ -324,7 +324,7 @@ namespace gold {
 		return pointer;
 	}
 
-	int WavFileReader::ReadLR(unsigned char *bufL, unsigned char *bufR, unsigned int leftToRead) {
+	unsigned int WavFileReader::ReadLR(unsigned char *bufL, unsigned char *bufR, unsigned int leftToRead) {
 
 		unsigned int readCnt, numSuccess, i = 0, pointer = 0;
 
@@ -373,7 +373,7 @@ namespace gold {
 		return pointer;
 	}
 
-	int WavFileReader::ReadLR(signed short *bufL, signed short *bufR, unsigned int leftToRead) {
+	unsigned int WavFileReader::ReadLR(signed short *bufL, signed short *bufR, unsigned int leftToRead) {
 
 		unsigned int readCnt, numSuccess, i = 0, pointer = 0;
 
@@ -422,7 +422,7 @@ namespace gold {
 		return pointer;
 	}
 
-	int WavFileReader::ReadLR(int *bufL, int *bufR, unsigned int leftToRead) {
+	unsigned int WavFileReader::ReadLR(int *bufL, int *bufR, unsigned int leftToRead) {
 
 		unsigned int readCnt, numSuccess, i = 0, pointer = 0;
 
@@ -472,7 +472,7 @@ namespace gold {
 		return pointer;
 	}
 
-	int WavFileReader::ReadLR(double *bufL, double *bufR, unsigned int leftToRead) {
+	unsigned int WavFileReader::ReadLR(double *bufL, double *bufR, unsigned int leftToRead) {
 
 		unsigned int readCnt, numSuccess, i = 0, pointer = 0;
 
@@ -522,7 +522,7 @@ namespace gold {
 		return pointer;
 	}
 
-	int WavFileReader::ReadLR(float *bufL, float *bufR, unsigned int leftToRead) {
+	unsigned int WavFileReader::ReadLR(float *bufL, float *bufR, unsigned int leftToRead) {
 
 		unsigned int readCnt, numSuccess, i = 0, pointer = 0;
 
@@ -578,7 +578,7 @@ namespace gold {
 			dataCnt = 0;
 			return 1;
 		}
-		if((long)dataCnt + offset > NumData){
+		if((unsigned long)(dataCnt + offset) > NumData){
 			fseek(fp, (NumData-dataCnt)*BlockAlign, origin);
 			dataCnt = NumData;
 			return 1;

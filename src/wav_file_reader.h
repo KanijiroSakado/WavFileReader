@@ -29,17 +29,17 @@ namespace gold {
 
 		void PrintHeader();
 
-		int Read(signed short *buf, unsigned int count);
-		int Read(int *buf, unsigned int count);
-		int Read(double *buf, unsigned int count);
-		int Read(float *buf, unsigned int count);
-		int Read(unsigned char *buf, unsigned int count);
+		unsigned int Read(signed short *buf, unsigned int count);
+		unsigned int Read(int *buf, unsigned int count);
+		unsigned int Read(double *buf, unsigned int count);
+		unsigned int Read(float *buf, unsigned int count);
+		unsigned int Read(unsigned char *buf, unsigned int count);
 
-		int ReadLR(signed short *bufL, signed short *bufR, unsigned int count);
-		int ReadLR(int *bufL, int *bufR, unsigned int count);
-		int ReadLR(double *bufL, double *bufR, unsigned int count);
-		int ReadLR(float *bufL, float *bufR, unsigned int count);
-		int ReadLR(unsigned char *bufL, unsigned char *bufR, unsigned int count);
+		unsigned int ReadLR(signed short *bufL, signed short *bufR, unsigned int count);
+		unsigned int ReadLR(int *bufL, int *bufR, unsigned int count);
+		unsigned int ReadLR(double *bufL, double *bufR, unsigned int count);
+		unsigned int ReadLR(float *bufL, float *bufR, unsigned int count);
+		unsigned int ReadLR(unsigned char *bufL, unsigned char *bufR, unsigned int count);
 
 		int Seek(long offset, int origin);
 		unsigned long Tell();
