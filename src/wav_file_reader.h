@@ -32,6 +32,7 @@ namespace gold {
 
 		unsigned int Read(signed short *buf, unsigned int count);
 		unsigned int Read(unsigned char *buf, unsigned int count);
+		//I know this is kind of like a mess, but member function templates have to be defined inside headers....
 		template <class Type> unsigned int Read(Type *buf, unsigned int count) {
 
 			unsigned int readCnt, numSuccess, i = 0, pointer = 0,leftToRead;
@@ -97,6 +98,7 @@ namespace gold {
 
 		unsigned int ReadLR(signed short *bufL, signed short *bufR, unsigned int count);
 		unsigned int ReadLR(unsigned char *bufL, unsigned char *bufR, unsigned int count);
+		//I know this is kind of like a mess, but member function templates have to be defined inside headers....
 		template <class Type> unsigned int ReadLR(Type *bufL, Type *bufR, unsigned int count) {
 
 			unsigned int readCnt, numSuccess, i = 0, pointer = 0,leftToRead;
