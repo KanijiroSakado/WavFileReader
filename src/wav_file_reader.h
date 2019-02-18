@@ -1,10 +1,11 @@
-#ifdef WAVE_FILE_READER_H
+#ifdef WAV_FILE_READER_H
 #else
 #define WAV_FILE_READER_H
 
 #include<cstdio>
 #include<exception>
-
+#include<typeinfo>
+#include"wav_file_reader_exceptions.h"
 
 namespace gold {
 
@@ -30,16 +31,139 @@ namespace gold {
 		void PrintHeader();
 
 		unsigned int Read(signed short *buf, unsigned int count);
-		unsigned int Read(int *buf, unsigned int count);
-		unsigned int Read(double *buf, unsigned int count);
-		unsigned int Read(float *buf, unsigned int count);
 		unsigned int Read(unsigned char *buf, unsigned int count);
+		template <class Type> unsigned int Read(Type *buf, unsigned int count) {
+
+			unsigned int readCnt, numSuccess, i = 0, pointer = 0,leftToRead;
+
+			if (typeid(Type) != typeid(int) &&
+				(typeid(Type) != typeid(unsigned int) || (BytesPerSample != 1)) &&
+				(typeid(Type) != typeid(unsigned short) || (BytesPerSample != 1)) &&
+				typeid(Type) != typeid(long) &&
+				(typeid(Type) != typeid(unsigned long) || (BytesPerSample != 1)) &&
+				typeid(Type) != typeid(double) &&
+				typeid(Type) != typeid(float)
+				) {
+				throw WFRIllegalArgumentType();
+				//To those who reached this exception
+				//The type of the first argument of Read function is illegal
+				//Available types are [unsigned char*, int*, short*, long*, double*, float*]
+				//Following types are available only when the format is 8bit [unsigned int*, unsigned short*, unsigned long*]
+				return 0;
+			}
+
+			leftToRead = count;
+			if (dataCnt + leftToRead > NumData)leftToRead = NumData - dataCnt;
+			readCnt = numGpBuf * NumChannels;
+
+			while (leftToRead > 0) {
+
+				if (leftToRead < numGpBuf) {
+					readCnt = leftToRead * NumChannels;
+					leftToRead = 0;
+				}
+				else {
+					leftToRead -= numGpBuf;
+				}
+
+				numSuccess = fread(gpBuf, BytesPerSample, readCnt, fp);
+				if (numSuccess < readCnt) leftToRead = 0;
+
+				if (NumChannels == 1 && BytesPerSample == 1) {
+					for (i = 0; i < numSuccess; pointer++, i++) {
+						buf[pointer] = ucharp[i];
+					}
+				}
+				else if (NumChannels == 1 && BytesPerSample == 2) {
+					for (i = 0; i < numSuccess; pointer++, i++) {
+						buf[pointer] = shortp[i];
+					}
+				}
+				else if (NumChannels == 2 && BytesPerSample == 1) {
+					for (i = 0; i < numSuccess; pointer++, i += 2) {
+						buf[pointer] = ((long)ucharp[i] + (long)ucharp[i + 1]) / 2;
+					}
+				}
+				else if (NumChannels == 2 && BytesPerSample == 2) {
+					for (i = 0; i < numSuccess; pointer++, i += 2) {
+							buf[pointer] = ((long)shortp[i] + (long)shortp[i + 1]) / 2;
+					}
+				}
+			}
+
+			dataCnt += pointer;
+			return pointer;
+		}
 
 		unsigned int ReadLR(signed short *bufL, signed short *bufR, unsigned int count);
-		unsigned int ReadLR(int *bufL, int *bufR, unsigned int count);
-		unsigned int ReadLR(double *bufL, double *bufR, unsigned int count);
-		unsigned int ReadLR(float *bufL, float *bufR, unsigned int count);
 		unsigned int ReadLR(unsigned char *bufL, unsigned char *bufR, unsigned int count);
+		template <class Type> unsigned int ReadLR(Type *bufL, Type *bufR, unsigned int count) {
+
+			unsigned int readCnt, numSuccess, i = 0, pointer = 0,leftToRead;
+
+			if (typeid(Type) != typeid(int) &&
+				(typeid(Type) != typeid(unsigned int) || (BytesPerSample != 1))&&
+				typeid(Type) != typeid(short) &&
+				(typeid(Type) != typeid(unsigned short) || (BytesPerSample != 1)) &&
+				typeid(Type) != typeid(long) &&
+				(typeid(Type) != typeid(unsigned long) || (BytesPerSample != 1)) &&
+				typeid(Type) != typeid(double) &&
+				typeid(Type) != typeid(float)
+				) {
+				throw WFRIllegalArgumentType();
+				//To those who reached this exception
+				//The type of the first argument of ReadLR function is illegal
+				//Available types are [unsigned char*, int*, short*, long*, double*, float*]
+				//Following types are available only when the format is 8bit [unsigned int*, unsigned short*, unsigned long*]
+				return 0;
+			}
+
+			leftToRead = count;
+			if (dataCnt + leftToRead > NumData)leftToRead = NumData - dataCnt;
+			readCnt = numGpBuf * NumChannels;
+
+			while (leftToRead > 0) {
+
+				if (leftToRead < numGpBuf) {
+					readCnt = leftToRead * NumChannels;
+					leftToRead = 0;
+				}
+				else {
+					leftToRead -= numGpBuf;
+				}
+
+				numSuccess = fread(gpBuf, BytesPerSample, readCnt, fp);
+				if (numSuccess < readCnt) leftToRead = 0;
+
+				if (NumChannels == 1 && BytesPerSample == 1) {
+					for (i = 0; i < numSuccess; pointer++, i++) {
+						bufL[pointer] = ucharp[i];
+						bufR[pointer] = ucharp[i];
+					}
+				}
+				else if (NumChannels == 1 && BytesPerSample == 2) {
+					for (i = 0; i < numSuccess; pointer++, i++) {
+						bufL[pointer] = shortp[i];
+						bufR[pointer] = shortp[i];
+					}
+				}
+				else if (NumChannels == 2 && BytesPerSample == 1) {
+					for (i = 0; i < numSuccess; pointer++, i += 2) {
+						bufL[pointer] = ucharp[i];
+						bufR[pointer] = ucharp[i + 1];
+					}
+				}
+				else if (NumChannels == 2 && BytesPerSample == 2) {
+					for (i = 0; i < numSuccess; pointer++, i += 2) {
+						bufL[pointer] = shortp[i];
+						bufR[pointer] = shortp[i + 1];
+					}
+				}
+			}
+
+			dataCnt += pointer;
+			return pointer;
+		}
 
 		int Seek(long offset, int origin);
 		unsigned long Tell();
@@ -55,29 +179,6 @@ namespace gold {
 
 	};
 
-
-
-	class WFRException :public std::exception {
-
-	};
-
-	class WFRFileOpenException :public  WFRException {
-		const char* what(void) const noexcept {
-			return "File Open Failed";
-		}
-	};
-
-	class WFRFileValidityException :public  WFRException {
-		const char* what(void) const noexcept {
-			return "Invalid File";
-		}
-	};
-
-	class WFRSupportedFormatException :public  WFRException {
-		const char* what(void) const noexcept {
-			return "Unsupported format (Supported format is 8bit and 16bit only)";
-		}
-	};
 
 }
 
