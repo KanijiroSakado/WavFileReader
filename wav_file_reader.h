@@ -58,20 +58,20 @@ namespace gold {
 
 
 		WavFileReader(const char*filename) {
-			numGpBuf = 44100;//default
+			numPrimaryBuf = 44100;//default
 			WavFileReaderPrivate(filename);
 		}
 
 		
-		WavFileReader(const char* filename, unsigned int gpBufCnt) {
-			this->numGpBuf = gpBufCnt;
+		WavFileReader(const char* filename, unsigned int numPrimaryBuf) {
+			this->numPrimaryBuf = numPrimaryBuf;
 			WavFileReaderPrivate(filename);
 		}
 
 		
 		~WavFileReader() {
 			fclose(fp);
-			free(gpBuf);
+			free(primaryBuf);
 		}
 
 		
@@ -104,19 +104,19 @@ namespace gold {
 
 			
 			if (dataCnt + leftToRead > NumData)leftToRead = NumData - dataCnt;
-			readCnt = numGpBuf * NumChannels;
+			readCnt = numPrimaryBuf * NumChannels;
 
 			while (leftToRead > 0) {
 
-				if (leftToRead < numGpBuf) {
+				if (leftToRead < numPrimaryBuf) {
 					readCnt = leftToRead * NumChannels;
 					leftToRead = 0;
 				}
 				else {
-					leftToRead -= numGpBuf;
+					leftToRead -= numPrimaryBuf;
 				}
 
-				numSuccess = fread(gpBuf, BytesPerSample, readCnt, fp);
+				numSuccess = fread(primaryBuf, BytesPerSample, readCnt, fp);
 				if (numSuccess < readCnt) leftToRead = 0;
 
 				ArrangeDataRead(buf, numSuccess, &pointer);
@@ -147,19 +147,19 @@ namespace gold {
 			}
 
 			if (dataCnt + leftToRead > NumData)leftToRead = NumData - dataCnt;
-			readCnt = numGpBuf * NumChannels;
+			readCnt = numPrimaryBuf * NumChannels;
 
 			while (leftToRead > 0) {
 
-				if (leftToRead < numGpBuf) {
+				if (leftToRead < numPrimaryBuf) {
 					readCnt = leftToRead * NumChannels;
 					leftToRead = 0;
 				}
 				else {
-					leftToRead -= numGpBuf;
+					leftToRead -= numPrimaryBuf;
 				}
 
-				numSuccess = fread(gpBuf, BytesPerSample, readCnt, fp);
+				numSuccess = fread(primaryBuf, BytesPerSample, readCnt, fp);
 				if (numSuccess < readCnt) leftToRead = 0;
 
 				ArrangeDataReadLR(bufL, bufR, numSuccess, &pointer);
@@ -193,8 +193,8 @@ namespace gold {
 		
 	private:
 		FILE* fp;
-		unsigned int numGpBuf;//count of general purpose buf = total buf size / BlockAlign
-		void *gpBuf;
+		unsigned int numPrimaryBuf;//count of general purpose buf = total buf size / BlockAlign
+		void *primaryBuf;
 		unsigned long dataCnt;
 		unsigned char *ucharp;
 		signed short *shortp;
@@ -258,9 +258,9 @@ namespace gold {
 
 			dataCnt = 0;
 
-			gpBuf = (unsigned char*)malloc(BytesPerSample * numGpBuf * NumChannels);
-			ucharp = (unsigned char*)gpBuf;
-			shortp = (signed short*)gpBuf;
+			primaryBuf = (unsigned char*)malloc(BytesPerSample * numPrimaryBuf * NumChannels);
+			ucharp = (unsigned char*)primaryBuf;
+			shortp = (signed short*)primaryBuf;
 
 			return;
 		}
