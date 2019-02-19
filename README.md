@@ -10,7 +10,7 @@ A simple and easy C++ single header library for reading(loading) WAV files.
 1. Include `wav_file_reader.h`.  
 1. Create `gold::WavFileReader` object and use `Read()` function to read data from WAV files.  
 
-The way of using it is very similar to  `fread()` function in `stdio.h` or `cstdio`.  
+The way of using it is very similar to  `fread()` function in C language.  
 ```
 #include"wav_file_reader.h"
 
