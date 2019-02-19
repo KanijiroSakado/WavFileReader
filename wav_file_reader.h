@@ -126,7 +126,6 @@ namespace gold {
 					}
 				}
 			}
-
 			dataCnt += pointer;
 			return pointer;
 		}
@@ -176,7 +175,6 @@ namespace gold {
 					}
 				}
 			}
-
 			dataCnt += pointer;
 			return pointer;
 		}
@@ -228,7 +226,6 @@ namespace gold {
 					}
 				}
 			}
-
 			dataCnt += pointer;
 			return pointer;
 		}
@@ -280,7 +277,6 @@ namespace gold {
 					}
 				}
 			}
-
 			dataCnt += pointer;
 			return pointer;
 		}
@@ -332,7 +328,6 @@ namespace gold {
 					}
 				}
 			}
-
 			dataCnt += pointer;
 			return pointer;
 		}
@@ -388,7 +383,6 @@ namespace gold {
 					}
 				}
 			}
-
 			dataCnt += pointer;
 			return pointer;
 		}
