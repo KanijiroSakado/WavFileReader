@@ -4,10 +4,17 @@
 
 #include<cstdio>
 #include<exception>
-#include<typeinfo>
-#include"wav_file_reader_exceptions.h"
+
 
 namespace gold {
+
+	template<typename T> struct ReadFunctionArgumentTypeValidation;
+	template<> struct ReadFunctionArgumentTypeValidation<int> {};
+	template<> struct ReadFunctionArgumentTypeValidation<short> {};
+	template<> struct ReadFunctionArgumentTypeValidation<long> {};
+	template<> struct ReadFunctionArgumentTypeValidation<double> {};
+	template<> struct ReadFunctionArgumentTypeValidation<float> {};
+
 
 	class WavFileReader {
 
@@ -32,26 +39,13 @@ namespace gold {
 
 		unsigned int Read(signed short *buf, unsigned int count);
 		unsigned int Read(unsigned char *buf, unsigned int count);
-		//I know this is kind of like a mess, but member function templates have to be defined inside headers....
 		template <class Type> unsigned int Read(Type *buf, unsigned int count) {
 
 			unsigned int readCnt, numSuccess, i = 0, pointer = 0,leftToRead;
 
-			if (typeid(Type) != typeid(int) &&
-				(typeid(Type) != typeid(unsigned int) || (BytesPerSample != 1)) &&
-				(typeid(Type) != typeid(unsigned short) || (BytesPerSample != 1)) &&
-				typeid(Type) != typeid(long) &&
-				(typeid(Type) != typeid(unsigned long) || (BytesPerSample != 1)) &&
-				typeid(Type) != typeid(double) &&
-				typeid(Type) != typeid(float)
-				) {
-				throw WFRIllegalArgumentType();
-				//To those who reached this exception
-				//The type of the first argument of Read function is illegal
-				//Available types are [unsigned char*, int*, short*, long*, double*, float*]
-				//Following types are available only when the format is 8bit [unsigned int*, unsigned short*, unsigned long*]
-				return 0;
-			}
+			sizeof(ReadFunctionArgumentTypeValidation<Type>);
+			//If you have compiler error here, then the type of the first argument of Read function is illegal
+			//Available types are [unsigned char*, int*, short*, long*, double*, float*]
 
 			leftToRead = count;
 			if (dataCnt + leftToRead > NumData)leftToRead = NumData - dataCnt;
@@ -98,27 +92,13 @@ namespace gold {
 
 		unsigned int ReadLR(signed short *bufL, signed short *bufR, unsigned int count);
 		unsigned int ReadLR(unsigned char *bufL, unsigned char *bufR, unsigned int count);
-		//I know this is kind of like a mess, but member function templates have to be defined inside headers....
 		template <class Type> unsigned int ReadLR(Type *bufL, Type *bufR, unsigned int count) {
 
 			unsigned int readCnt, numSuccess, i = 0, pointer = 0,leftToRead;
 
-			if (typeid(Type) != typeid(int) &&
-				(typeid(Type) != typeid(unsigned int) || (BytesPerSample != 1))&&
-				typeid(Type) != typeid(short) &&
-				(typeid(Type) != typeid(unsigned short) || (BytesPerSample != 1)) &&
-				typeid(Type) != typeid(long) &&
-				(typeid(Type) != typeid(unsigned long) || (BytesPerSample != 1)) &&
-				typeid(Type) != typeid(double) &&
-				typeid(Type) != typeid(float)
-				) {
-				throw WFRIllegalArgumentType();
-				//To those who reached this exception
-				//The type of the first argument of ReadLR function is illegal
-				//Available types are [unsigned char*, int*, short*, long*, double*, float*]
-				//Following types are available only when the format is 8bit [unsigned int*, unsigned short*, unsigned long*]
-				return 0;
-			}
+			sizeof(ReadFunctionArgumentTypeValidation<Type>);
+			//If you have compiler error here, then the type of the first argument of ReadLR function is illegal
+			//Available types are [unsigned char*, int*, short*, long*, double*, float*]
 
 			leftToRead = count;
 			if (dataCnt + leftToRead > NumData)leftToRead = NumData - dataCnt;
@@ -179,6 +159,26 @@ namespace gold {
 		signed short *shortp;
 		void WavFileReaderPrivate(const char *filename);
 
+	};
+
+	class WFRException :public std::exception {};
+
+	class WFRFileOpenException :public  WFRException {
+		const char* what(void) const noexcept {
+			return "File Open Failed";
+		}
+	};
+
+	class WFRFileValidityException :public  WFRException {
+		const char* what(void) const noexcept {
+			return "Invalid File";
+		}
+	};
+
+	class WFRSupportedFormatException :public  WFRException {
+		const char* what(void) const noexcept {
+			return "Unsupported format";
+		}
 	};
 
 
