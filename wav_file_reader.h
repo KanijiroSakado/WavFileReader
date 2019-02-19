@@ -60,16 +60,19 @@ namespace gold {
 			WavFileReaderPrivate(filename);
 		}
 
+		
 		WavFileReader(const char* filename, unsigned int gpBufCnt) {
 			this->numGpBuf = gpBufCnt;
 			WavFileReaderPrivate(filename);
 		}
 
+		
 		~WavFileReader() {
 			fclose(fp);
 			free(gpBuf);
 		}
 
+		
 		void PrintHeader() {
 
 			printf("format size= %d\nformat ID = %d\nchannels = %d\nsampling rate = %d\nbytes per sec = %d\nblock align = %d\nbits per sample = %d\ndata size = %d\n"
@@ -78,6 +81,7 @@ namespace gold {
 			return;
 		}
 
+		
 		unsigned int Read(signed short *buf, unsigned int count) {
 
 			unsigned int readCnt, numSuccess, leftToRead, i = 0, pointer = 0;
@@ -127,6 +131,7 @@ namespace gold {
 			return pointer;
 		}
 
+		
 		unsigned int Read(unsigned char *buf, unsigned int count) {
 
 			unsigned int readCnt, numSuccess, leftToRead, i = 0, pointer = 0;
@@ -175,6 +180,7 @@ namespace gold {
 			dataCnt += pointer;
 			return pointer;
 		}
+		
 		
 		template <class Type> unsigned int Read(Type *buf, unsigned int count) {
 
@@ -227,6 +233,7 @@ namespace gold {
 			return pointer;
 		}
 
+		
 		unsigned int ReadLR(signed short *bufL, signed short *bufR, unsigned int count) {
 
 			unsigned int readCnt, numSuccess, leftToRead, i = 0, pointer = 0;
@@ -278,6 +285,7 @@ namespace gold {
 			return pointer;
 		}
 		
+		
 		unsigned int ReadLR(unsigned char *bufL, unsigned char *bufR, unsigned int count) {
 
 			unsigned int readCnt, numSuccess, leftToRead, i = 0, pointer = 0;
@@ -328,6 +336,7 @@ namespace gold {
 			dataCnt += pointer;
 			return pointer;
 		}
+		
 		
 		template <class Type> unsigned int ReadLR(Type *bufL, Type *bufR, unsigned int count) {
 
@@ -384,6 +393,7 @@ namespace gold {
 			return pointer;
 		}
 
+		
 		int Seek(long offset, int origin) {
 			if ((long)dataCnt < (-1) * offset) {//changed the type of dataCnt from uint to long, so I removed the casting dataCnt to long
 				fseek(fp, (-1) * dataCnt * BlockAlign, origin);
@@ -399,10 +409,12 @@ namespace gold {
 			return fseek(fp, BlockAlign*offset, origin);
 		}
 
+		
 		unsigned long Tell() {
 			return dataCnt;
 		}
 
+		
 	private:
 		FILE* fp;
 		unsigned int numGpBuf;//count of general purpose buf = total buf size / BlockAlign
@@ -410,6 +422,7 @@ namespace gold {
 		unsigned long dataCnt;
 		unsigned char *ucharp;
 		signed short *shortp;
+		
 		void WavFileReaderPrivate(const char*filename) {
 
 			char ch[5];
