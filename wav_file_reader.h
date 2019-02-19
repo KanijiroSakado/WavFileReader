@@ -94,8 +94,8 @@ namespace gold {
 			
 			leftToRead = count;
 
-			if ((NumChannels == 1 && BytesPerSample == 2 && sizeof(Type) == sizeof(short)) ||
-				(NumChannels == 1 && BytesPerSample == 1 && sizeof(Type) == sizeof(unsigned char))) 
+			if ((NumChannels == 1 && BitsPerSample == 16 && sizeof(Type) == sizeof(short)) ||
+				(NumChannels == 1 && BitsPerSample == 8 && sizeof(Type) == sizeof(unsigned char))) 
 			{
 				numSuccess = fread(buf, BytesPerSample, leftToRead, fp);
 				dataCnt += numSuccess;
@@ -137,8 +137,8 @@ namespace gold {
 
 			leftToRead = count;
 
-			if ((NumChannels == 1 && BytesPerSample == 2 && sizeof(Type) == sizeof(short)) ||
-				(NumChannels == 1 && BytesPerSample == 1 && sizeof(Type) == sizeof(unsigned char)))
+			if ((NumChannels == 1 && BitsPerSample == 16 && sizeof(Type) == sizeof(short)) ||
+				(NumChannels == 1 && BitsPerSample == 8 && sizeof(Type) == sizeof(unsigned char)))
 			{
 				numSuccess = fread(bufL, BytesPerSample, leftToRead, fp);
 				memcpy(bufR, bufL, numSuccess * BytesPerSample);
@@ -270,12 +270,12 @@ namespace gold {
 			
 			unsigned int i,pointer = *bufPointer;
 
-			if (NumChannels == 1 && BytesPerSample == 1) {
+			if (NumChannels == 1 && BitsPerSample == 8) {
 				for (i = 0; i < numSuccess; pointer++, i++) {
 					buf[pointer] = ucharp[i];
 				}
 			}
-			else if (NumChannels == 1 && BytesPerSample == 2) {
+			else if (NumChannels == 1 && BitsPerSample == 16) {
 
 				switch (sizeof(Type)) {
 					case sizeof(unsigned char) :
@@ -287,7 +287,7 @@ namespace gold {
 							buf[pointer] = shortp[i];
 				}
 			}
-			else if (NumChannels == 2 && BytesPerSample == 1) {
+			else if (NumChannels == 2 && BitsPerSample == 8) {
 
 				switch (sizeof(Type)) {
 					case sizeof(unsigned char) :
@@ -299,7 +299,7 @@ namespace gold {
 							buf[pointer] = ((long)ucharp[i] + (long)ucharp[i + 1]) / 2;
 				}
 			}
-			else if (NumChannels == 2 && BytesPerSample == 2) {
+			else if (NumChannels == 2 && BitsPerSample == 16) {
 
 				switch (sizeof(Type)) {
 					case sizeof(unsigned char) :
@@ -319,14 +319,14 @@ namespace gold {
 			
 			unsigned int i,pointer = *bufPointer;
 
-			if (NumChannels == 1 && BytesPerSample == 1) {
+			if (NumChannels == 1 && BitsPerSample == 8) {
 
 				for (i = 0; i < numSuccess; pointer++, i++) {
 					bufL[pointer] = ucharp[i];
 					bufR[pointer] = ucharp[i];
 				}
 			}
-			else if (NumChannels == 1 && BytesPerSample == 2) {
+			else if (NumChannels == 1 && BitsPerSample == 16) {
 
 				switch (sizeof(Type)) {
 					case sizeof(unsigned char) :
@@ -342,14 +342,14 @@ namespace gold {
 						}
 				}
 			}
-			else if (NumChannels == 2 && BytesPerSample == 1) {
+			else if (NumChannels == 2 && BitsPerSample == 8) {
 
 				for (i = 0; i < numSuccess; pointer++, i += 2) {
 					bufL[pointer] = ucharp[i];
 					bufR[pointer] = ucharp[i + 1];
 				}
 			}
-			else if (NumChannels == 2 && BytesPerSample == 2) {
+			else if (NumChannels == 2 && BitsPerSample == 16) {
 
 				switch (sizeof(Type)) {
 					case sizeof(unsigned char) :
