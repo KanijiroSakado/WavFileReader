@@ -1,12 +1,10 @@
-みなさんwavファイルを読み込みたくなる時、ありますよね。
-そんな時にいちいち自分でファイルを解析するプログラムを書くのは面倒だと思いませんか？この`WavFileReader`はあなたをその煩わしさから解放します。単に基本的なフォーマット情報とPCMデータを読み込むだけでいいのならね。本記事ではその使い方をざっくり説明します。ただし対応しているPCMの形式は8bitと16bitのみであり、24bitには対応していないことにご注意ください。
+みなさんWAVファイルを読み込みたくなる時、ありますよね。
+そんな時にわざわざ自分でファイルを解析するプログラムを書くのは面倒だと思いませんか？この`WavFileReader`はあなたをその煩わしさから解放します。単に基本的なフォーマット情報とPCMデータを読み込むだけでいいのならね。しかもシングルヘッダライブラリになっているので、ヘッダファイルをインクルードするだけで使えます。本記事ではこれの使い方をざっくり説明します。ただし対応している形式は非圧縮リニアPCMの8bitと16bitのみであり、24bitには対応していないことにご注意ください。
 
 
-# 1. ソースを追加してヘッダをインクルードする
-githubからWavFileReaderのリポジトリをcloneもしくはダウンロードします。
+# 1. ヘッダをインクルードする
+githubからWavFileReaderのリポジトリをcloneもしくはダウンロードし、その中にある`wav_file_reader.h`をこのライブラリを使用したいファイルの先頭でインクルードしてください。
 https://github.com/GoldSakana/WavFileReader
-
-その後`src`ディレクトリ内のファイル（２つしかないけど）をあなたのプロジェクトに追加して、このクラスを使用したいファイルの先頭で`wav_file_reader.h`をインクルードしてください。
 
 ```C++
 #include"wav_file_reader.h"
@@ -20,7 +18,8 @@ https://github.com/GoldSakana/WavFileReader
 作ってください。名前空間`gold`をお忘れなく。読み込むファイルもここで指定してください。
 　　
 # 3. `Read()`関数でPCMデータを読み込む
-`int Read(unsigned char *buf, unsigned int count)`
+`unsigned int Read(unsigned char *buf, unsigned int count);`  
+
 読み込むPCMデータを格納する配列を用意してください。その配列の先頭ポインタを第一引数に渡し、第二引数には読み込みたいデータの個数を渡します。
 
 これで配列には第二引数で指定された個数ぶんのPCMデータが格納されます。C言語の`fread()`関数のような感じです。次のデータが読み込みたければ`fread()`と同様にもう一度`Read()`関数を呼べば次のデータが格納されます。
@@ -33,7 +32,7 @@ https://github.com/GoldSakana/WavFileReader
 
 ここで注意して頂きたいのはWAVファイルのフォーマットがステレオの場合は、左右のデータが自動的に平均された値が配列に格納されるということです。左右のデータを別々に取得したい場合は後述する`ReadLR()`関数を使用してください。
 
-`Read()`関数には配列ポインタとして`unsigned char*`以外のデータ型を受け取れるオーバーロードが複数あります。具体的には`signed short*`, `int*`, `double*`, `float*`型が受け取れます。
+`Read()`関数はテンプレート関数になっており、第一引数には配列ポインタとして`unsigned char*`型以外にも`int*`型、`short*`型、`long*`型、`double*`型、`float*`型が受け取れます。それ以外の型を渡すとエラーになります。
 
 基本的に読み込んだ値は加工されずにそのまま配列に格納されます。しかし読み込み先が`16bit`で受け取り先が`8bit`の場合のみ例外で、そのままでは溢れてしまうので値は自動的に`8bit`に変換されて格納されます。
 　　
@@ -60,26 +59,42 @@ int main(void) {
 細かい機能の説明をします。
 <br/>
 
-* __`WavFileReader(const char* filename, unsigned int gpBufCnt)`コンストラクタ__  
+### __WAVフォーマット情報__
+
+インスタンス変数により取得可能です。
+
+```C++
+	int v1 = wfr.NumChannels;
+	int v2 = wfr.SampleRate;
+	int v3 = wfr.BitsPerSample;
+	int v4 = wfr.DataSize;//データの総サイズ
+	int v5 = wfr.NumData;//データの総サンプル数（ステレオの場合は左右のセットで１つと数えます）
+```
+<br/>
+
+### __`WavFileReader()`コンストラクタ__  
    
-パフォーマンスを最大限に発揮したいという方は、以下のように第二引数に自分が後にRead()関数の第二引数として使用する値と同じ値またはそれより大きな値を指定してください。これはオブジェクト内部で確保されるメモリの大きさに関係します。なので無駄に大きすぎるのも良くないでしょう。
+`WavFileReader(const char* filename);`
+`WavFileReader(const char* filename, unsigned int gpBufCnt);`  
+
+速度面のパフォーマンスを最大限に発揮したいという方は、以下のように第二引数に自分が後にRead()関数の第二引数として使用する値と同じ値またはそれより大きな値を指定してください。これはオブジェクト内部で確保されるメモリの大きさに関係します。なので無駄に大きすぎるのも良くないでしょう。
 
 ```C++
 gold::WavFileReader wfr("test.wav",44100);
 ```
-また、このコンストラクタはファイルが存在しないなどの例外の場合に`wav_file_reader.h`内で定義されている`WFRException`オブジェクトをスローします。
+また、このコンストラクタはファイルが存在しないなどの例外の場合に`wav_file_reader_exceptions.h`内で定義されている`WFRException`オブジェクトをスローします。
 <br/>
-<br/>
 
-* __`int Read(unsigned char *buf, unsigned int count)`関数__
+### __`Read()`関数__
+`unsigned int Read(unsigned char *buf, unsigned int count);`  
 
-上でだいたい説明しました。戻り値は`fread()`関数と同じく読み込みに成功したサンプル数です。通常は第二引数と同じ値が返ります。
+[上](#3-read関数でpcmデータを読み込む)でだいたい説明しました。戻り値は`fread()`関数と同じく読み込みに成功したサンプル数です。通常は第二引数と同じ値が返ります。
 <br />
-<br />
 
-* __`int ReadLR(unsigned char *bufL, unsigned char *bufR, unsigned int count)`関数__
+### __`ReadLR()`関数__
+`unsigned int ReadLR(unsigned char *bufL, unsigned char *bufR, unsigned int count);`  
 
-`Read()`関数とだいたい同じですが、違う点は配列のポインタを2つ受け取るところです。`bufL`に左のPCMデータ、`bufR`に右のPCMデータがそれぞれ`count`個ずつ格納されます。読み込み先がモノラルデータの場合は2つの配列には同じ値が格納されます。この関数にも違う型を扱えるオーバーロードがあります。扱える型の種類は先程上で挙げた`Read()`関数と同様です。
+`Read()`関数とだいたい同じですが、違う点は配列のポインタを2つ受け取るところです。`bufL`に左のPCMデータ、`bufR`に右のPCMデータがそれぞれ`count`個ずつ格納されます。読み込み先がモノラルデータの場合は2つの配列には同じ値が格納されます。この関数も`Read()`関数と同様に第一引数に`unsigned char*`以外の型を受け取れます。扱える型の種類も先程[上](#3-read関数でpcmデータを読み込む)で挙げた`Read()`関数と同様です。
 
 戻り値は読み込みに成功したサンプル数です。左右のセットで1つのサンプル数とカウントします。通常は第3引数と同じ値です。
 
@@ -90,9 +105,9 @@ gold::WavFileReader wfr("test.wav",44100);
 	wfr.ReadLR(bufL, bufR, 1000);
 ```
 <br/>
-<br />
 
-* __`int Seek(long offset, int origin)`関数__
+### __`Seek()`関数__
+`int Seek(long offset, int origin);`  
 
 C言語の`fseek()`関数とだいたい同じですが、`offset`に指定する値は移動するデータサイズではなくサンプル数です。読み込み先がステレオの場合は`offset`*2サンプル先に進むことになります。
 
@@ -104,15 +119,16 @@ C言語の`fseek()`関数とだいたい同じですが、`offset`に指定す�
 	wfr.Seek(5000, SEEK_CUR);
 ```
 <br/>
-<br/>
 
-* __WAVフォーマット情報__
+### __`Tell()`関数__
+`unsigned long Tell(void);`  
 
-インスタンス変数により取得可能です。
+C言語の`ftell()`関数のようなものです。戻り値は読み込んでいるファイルの現在の読み込み位置です。戻り値の単位は例によってデータサイズではなくサンプル数であることに注意してください。読み込み先がステレオの場合は左右のセットで1サンプルと数えます。
 
 ```C++
-	int v1 = wfr.NumChannels
-	int v2 = wfr.SampleRate
-	int v3 = wfr.BitsPerSample
+	unsigned int v0 = wfr.Tell();
 ```
 
+　　
+# 6. 最後に
+WavFileReaderは自分用に作ったものですが、便利なので他の人にも使ってもらえればという思いでコードを整えて公開致しました。正直言ってgithubに上げるのもQiitaに投稿するのも初めてです。わりと手探りなので至らぬ点があればご容赦願いたいです。改善点などあればご指摘頂ければ幸いです。
