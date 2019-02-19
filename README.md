@@ -1,5 +1,5 @@
 # WavFileReader
-A simple and easy WAV file reader(loader) in C++.
+A simple and easy C++ single header library for reading(loading) WAV files. 
 
 ## What You Can Do
 * Loading PCM data as single channel and multi channels 
