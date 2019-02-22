@@ -86,7 +86,7 @@ namespace gold {
 		
 		template <class Type> unsigned int Read(Type *buf, unsigned int count) {
 
-			unsigned int readCnt, numSuccess, pointer = 0,leftToRead;
+			unsigned int readCnt, numSuccess, numDone = 0,leftToRead;
 
 			sizeof(ReadFunctionArgumentTypeValidation<Type>);
 			//If you have a compiler error here, then the type of the first argument of Read function is illegal
@@ -98,12 +98,12 @@ namespace gold {
 				(NumChannels == 1 && BitsPerSample == 8 && sizeof(Type) == sizeof(unsigned char))) 
 			{
 				numSuccess = fread(buf, BytesPerSample, leftToRead, fp);
-				dataCnt += numSuccess;
+				wavFilePointer += numSuccess;
 				return numSuccess;
 			}
 
 			
-			if (dataCnt + leftToRead > NumData)leftToRead = NumData - dataCnt;
+			if (wavFilePointer + leftToRead > NumData)leftToRead = NumData - wavFilePointer;
 			readCnt = numPrimaryBuf * NumChannels;
 
 			while (leftToRead > 0) {
@@ -119,17 +119,18 @@ namespace gold {
 				numSuccess = fread(primaryBuf, BytesPerSample, readCnt, fp);
 				if (numSuccess < readCnt) leftToRead = 0;
 
-				ArrangeDataRead(buf, numSuccess, &pointer);
+				ArrangeDataRead(buf, numSuccess);
+				numDone += numSuccess;
 				
 			}
-			dataCnt += pointer;
-			return pointer;
+			wavFilePointer += numDone;
+			return numDone;
 		}
 
 
 		template <class Type> unsigned int ReadLR(Type *bufL, Type *bufR, unsigned int count) {
 
-			unsigned int readCnt, numSuccess, pointer = 0,leftToRead;
+			unsigned int readCnt, numSuccess, numDone = 0,leftToRead;
 
 			sizeof(ReadFunctionArgumentTypeValidation<Type>);
 			//If you have a compiler error here, then the type of the first argument of ReadLR function is illegal
@@ -142,11 +143,11 @@ namespace gold {
 			{
 				numSuccess = fread(bufL, BytesPerSample, leftToRead, fp);
 				memcpy(bufR, bufL, numSuccess * BytesPerSample);
-				dataCnt += numSuccess;
+				wavFilePointer += numSuccess;
 				return numSuccess;
 			}
 
-			if (dataCnt + leftToRead > NumData)leftToRead = NumData - dataCnt;
+			if (wavFilePointer + leftToRead > NumData)leftToRead = NumData - wavFilePointer;
 			readCnt = numPrimaryBuf * NumChannels;
 
 			while (leftToRead > 0) {
@@ -162,32 +163,33 @@ namespace gold {
 				numSuccess = fread(primaryBuf, BytesPerSample, readCnt, fp);
 				if (numSuccess < readCnt) leftToRead = 0;
 
-				ArrangeDataReadLR(bufL, bufR, numSuccess, &pointer);
+				ArrangeDataReadLR(bufL, bufR, numSuccess);
+				numDone += numSuccess;
 				
 			}
-			dataCnt += pointer;
-			return pointer;
+			wavFilePointer += numDone;
+			return numDone;
 		}
 
 		
 		int Seek(long offset, int origin) {
-			if ((long)dataCnt < (-1) * offset) {//changed the type of dataCnt from uint to long, so I removed the casting dataCnt to long
-				fseek(fp, (-1) * dataCnt * BlockAlign, origin);
-				dataCnt = 0;
+			if ((long)wavFilePointer < (-1) * offset) {//changed the type of dataCnt from uint to long, so I removed the casting dataCnt to long
+				fseek(fp, (-1) * wavFilePointer * BlockAlign, origin);
+				wavFilePointer = 0;
 				return 1;
 			}
-			if ((unsigned long)(dataCnt + offset) > NumData) {
-				fseek(fp, (NumData - dataCnt)*BlockAlign, origin);
-				dataCnt = NumData;
+			if ((unsigned long)(wavFilePointer + offset) > NumData) {
+				fseek(fp, (NumData - wavFilePointer)*BlockAlign, origin);
+				wavFilePointer = NumData;
 				return 1;
 			}
-			dataCnt += offset;
+			wavFilePointer += offset;
 			return fseek(fp, BlockAlign*offset, origin);
 		}
 
 		
 		unsigned long Tell() {
-			return dataCnt;
+			return wavFilePointer;
 		}
 
 		
@@ -195,7 +197,7 @@ namespace gold {
 		FILE* fp;
 		unsigned int numPrimaryBuf;//count of general purpose buf = total buf size / BlockAlign
 		void *primaryBuf;
-		unsigned long dataCnt;
+		unsigned long wavFilePointer;
 		unsigned char *ucharp;
 		signed short *shortp;
 		
@@ -256,7 +258,7 @@ namespace gold {
 				throw WFRFileValidityException();
 			}
 
-			dataCnt = 0;
+			wavFilePointer = 0;
 
 			primaryBuf = (unsigned char*)malloc(BytesPerSample * numPrimaryBuf * NumChannels);
 			ucharp = (unsigned char*)primaryBuf;
@@ -266,107 +268,104 @@ namespace gold {
 		}
 
 
-		template <class Type> void ArrangeDataRead(Type *buf, unsigned int numSuccess, unsigned int *bufPointer) {
+		template <class Type> void ArrangeDataRead(Type *&buf, unsigned int numSuccess) {
 			
-			unsigned int i,pointer = *bufPointer;
+			unsigned int i;
 
 			if (NumChannels == 1 && BitsPerSample == 8) {
-				for (i = 0; i < numSuccess; pointer++, i++) {
-					buf[pointer] = ucharp[i];
+				for (i = 0; i < numSuccess; i++) {
+					*(buf++) = ucharp[i];
 				}
 			}
 			else if (NumChannels == 1 && BitsPerSample == 16) {
 
 				switch (sizeof(Type)) {
 					case sizeof(unsigned char) :
-						for (i = 0; i < numSuccess; pointer++, i++)
-							buf[pointer] = (unsigned long)((long)shortp[i] + 0x8000) >> 9;
+						for (i = 0; i < numSuccess; i++)
+							*(buf++) = (unsigned long)((long)shortp[i] + 0x8000) >> 9;
 						break;
 					default:
-						for (i = 0; i < numSuccess; pointer++, i++)
-							buf[pointer] = shortp[i];
+						for (i = 0; i < numSuccess; i++)
+							*(buf++) = shortp[i];
 				}
 			}
 			else if (NumChannels == 2 && BitsPerSample == 8) {
 
 				switch (sizeof(Type)) {
 					case sizeof(unsigned char) :
-						for (i = 0; i < numSuccess; pointer++, i += 2)
-							buf[pointer] = ((unsigned long)ucharp[i] + (unsigned long)ucharp[i + 1]) >> 1;
+						for (i = 0; i < numSuccess; i += 2)
+							*(buf++) = ((unsigned long)ucharp[i] + (unsigned long)ucharp[i + 1]) >> 1;
 						break;
 					default:
-						for (i = 0; i < numSuccess; pointer++, i += 2)
-							buf[pointer] = ((long)ucharp[i] + (long)ucharp[i + 1]) / 2;
+						for (i = 0; i < numSuccess; i += 2)
+							*(buf++) = ((long)ucharp[i] + (long)ucharp[i + 1]) / 2;
 				}
 			}
 			else if (NumChannels == 2 && BitsPerSample == 16) {
 
 				switch (sizeof(Type)) {
 					case sizeof(unsigned char) :
-						for (i = 0; i < numSuccess; pointer++, i += 2)
-							buf[pointer] = (unsigned long)((long)shortp[i] + (long)shortp[i + 1] + 0x10000) >> 9;
+						for (i = 0; i < numSuccess; i += 2)
+							*(buf++) = (unsigned long)((long)shortp[i] + (long)shortp[i + 1] + 0x10000) >> 9;
 						break;
 					default:
-						for (i = 0; i < numSuccess; pointer++, i += 2)
-							buf[pointer] = ((long)shortp[i] + (long)shortp[i + 1]) / 2;
+						for (i = 0; i < numSuccess; i += 2)
+							*(buf++) = ((long)shortp[i] + (long)shortp[i + 1]) / 2;
 				}
 			}
-			*bufPointer = pointer;
 		}
 
 
-		template <class Type> void ArrangeDataReadLR(Type *bufL, Type *bufR, unsigned int numSuccess, unsigned int* bufPointer) {
+		template <class Type> void ArrangeDataReadLR(Type *&bufL, Type *&bufR, unsigned int numSuccess) {
 			
-			unsigned int i,pointer = *bufPointer;
+			unsigned int i;
 
 			if (NumChannels == 1 && BitsPerSample == 8) {
 
-				for (i = 0; i < numSuccess; pointer++, i++) {
-					bufL[pointer] = ucharp[i];
-					bufR[pointer] = ucharp[i];
+				for (i = 0; i < numSuccess; i++) {
+					*(bufL++) = ucharp[i];
+					*(bufR++) = ucharp[i];
 				}
 			}
 			else if (NumChannels == 1 && BitsPerSample == 16) {
 
 				switch (sizeof(Type)) {
 					case sizeof(unsigned char) :
-						for (i = 0; i < numSuccess; pointer++, i++) {
-							bufL[pointer] = (unsigned long)((long)shortp[i] + 0x8000) >> 8;
-							bufR[pointer] = (unsigned long)((long)shortp[i] + 0x8000) >> 8;
+						for (i = 0; i < numSuccess; i++) {
+							*(bufL++) = (unsigned long)((long)shortp[i] + 0x8000) >> 8;
+							*(bufR++) = (unsigned long)((long)shortp[i] + 0x8000) >> 8;
 						}
 											   break;
 					default:
-						for (i = 0; i < numSuccess; pointer++, i++) {
-							bufL[pointer] = shortp[i];
-							bufR[pointer] = shortp[i];
+						for (i = 0; i < numSuccess; i++) {
+							*(bufL++) = shortp[i];
+							*(bufR++) = shortp[i];
 						}
 				}
 			}
 			else if (NumChannels == 2 && BitsPerSample == 8) {
 
-				for (i = 0; i < numSuccess; pointer++, i += 2) {
-					bufL[pointer] = ucharp[i];
-					bufR[pointer] = ucharp[i + 1];
+				for (i = 0; i < numSuccess; i += 2) {
+					*(bufL++) = ucharp[i];
+					*(bufR++) = ucharp[i + 1];
 				}
 			}
 			else if (NumChannels == 2 && BitsPerSample == 16) {
 
 				switch (sizeof(Type)) {
 					case sizeof(unsigned char) :
-						for (i = 0; i < numSuccess; pointer++, i += 2) {
-							bufL[pointer] = ((long)shortp[i] + 0x8000) >> 8;
-							bufR[pointer] = ((long)shortp[i + 1] + 0x8000) >> 8;
+						for (i = 0; i < numSuccess; i += 2) {
+							*(bufL++) = ((long)shortp[i] + 0x8000) >> 8;
+							*(bufR++) = ((long)shortp[i + 1] + 0x8000) >> 8;
 						}
 											   break;
 					default:
-						for (i = 0; i < numSuccess; pointer++, i += 2) {
-							bufL[pointer] = shortp[i];
-							bufR[pointer] = shortp[i + 1];
+						for (i = 0; i < numSuccess; i += 2) {
+							*(bufL++) = shortp[i];
+							*(bufR++) = shortp[i + 1];
 						}
 				}
 			}
-
-			*bufPointer = pointer;
 		}
 
 	};
