@@ -119,7 +119,7 @@ namespace gold {
 				numSuccess = fread(primaryBuf, BytesPerSample, readCnt, fp);
 				if (numSuccess < readCnt) leftToRead = 0;
 
-				ArrangeDataRead(buf, numSuccess);
+				ArrangeReadData(buf, numSuccess);
 				numDone += numSuccess;
 				
 			}
@@ -163,7 +163,7 @@ namespace gold {
 				numSuccess = fread(primaryBuf, BytesPerSample, readCnt, fp);
 				if (numSuccess < readCnt) leftToRead = 0;
 
-				ArrangeDataReadLR(bufL, bufR, numSuccess);
+				ArrangeReadLRData(bufL, bufR, numSuccess);
 				numDone += numSuccess;
 				
 			}
@@ -268,7 +268,7 @@ namespace gold {
 		}
 
 
-		template <class Type> void ArrangeDataRead(Type *&buf, unsigned int numSuccess) {
+		template <class Type> void ArrangeReadData(Type *&buf, unsigned int numSuccess) {
 			
 			unsigned int i;
 
@@ -316,7 +316,7 @@ namespace gold {
 		}
 
 
-		template <class Type> void ArrangeDataReadLR(Type *&bufL, Type *&bufR, unsigned int numSuccess) {
+		template <class Type> void ArrangeReadLRData(Type *&bufL, Type *&bufR, unsigned int numSuccess) {
 			
 			unsigned int i;
 
