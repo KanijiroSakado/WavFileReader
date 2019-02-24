@@ -173,7 +173,7 @@ namespace gold {
 
 		
 		int Seek(long offset, int origin) {
-			if ((long)wavFilePointer < (-1) * offset) {//changed the type of dataCnt from uint to long, so I removed the casting dataCnt to long
+			if ((long)wavFilePointer < (-1) * offset) {
 				fseek(fp, (-1) * wavFilePointer * BlockAlign, origin);
 				wavFilePointer = 0;
 				return 1;
