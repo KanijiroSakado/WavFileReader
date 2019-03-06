@@ -62,6 +62,21 @@ namespace gold {
 			WavFileReaderPrivate(filename);
 		}
 
+		WavFileReader(const WavFileReader&obj) {
+
+			*this = obj;
+
+			fp = fopen(obj.filename, "rb"); printf("%shihihi\n", obj.filename);
+			if (fp == NULL) {
+				throw WFRFileOpenException();
+			}
+			fseek(fp, ftell(obj.fp), SEEK_SET);
+
+			primaryBuf = (unsigned char*)malloc(obj.BytesPerSample * obj.numPrimaryBuf * obj.NumChannels);
+			ucharp = (unsigned char*)primaryBuf;
+			shortp = (signed short*)primaryBuf;
+		}
+
 		
 		WavFileReader(const char* filename, unsigned int numPrimaryBuf) {
 			this->numPrimaryBuf = numPrimaryBuf;
@@ -200,11 +215,19 @@ namespace gold {
 		unsigned long wavFilePointer;
 		unsigned char *ucharp;
 		signed short *shortp;
+		char filename[256];
 		
 		void WavFileReaderPrivate(const char*filename) {
 
 			char ch[5];
-			unsigned int size;//chunk size
+			unsigned int size,i;//chunk size
+
+			i = 0;
+			while (filename[i] != '\0'&&i < 255) {
+				this->filename[i] = filename[i];
+				i++;
+			}
+			this->filename[i] = '\0'; 
 
 			fp = fopen(filename, "rb");
 			if (fp == NULL) {
