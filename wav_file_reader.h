@@ -62,6 +62,13 @@ namespace gold {
 			WavFileReaderPrivate(filename);
 		}
 
+		
+		WavFileReader(const char* filename, unsigned int numPrimaryBuf) {
+			this->numPrimaryBuf = numPrimaryBuf;
+			WavFileReaderPrivate(filename);
+		}
+
+		
 		WavFileReader(const WavFileReader&obj) {
 
 			*this = obj;
@@ -77,13 +84,7 @@ namespace gold {
 			shortp = (signed short*)primaryBuf;
 		}
 
-		
-		WavFileReader(const char* filename, unsigned int numPrimaryBuf) {
-			this->numPrimaryBuf = numPrimaryBuf;
-			WavFileReaderPrivate(filename);
-		}
 
-		
 		~WavFileReader() {
 			fclose(fp);
 			free(primaryBuf);
