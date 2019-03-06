@@ -73,7 +73,7 @@ namespace gold {
 
 			*this = obj;
 
-			fp = fopen(obj.filename, "rb"); printf("%shihihi\n", obj.filename);
+			fp = fopen(obj.filename, "rb");
 			if (fp == NULL) {
 				throw WFRFileOpenException();
 			}
