@@ -82,13 +82,13 @@ int main(void) {
 ```C++
 gold::WavFileReader wfr("test.wav",44100);
 ```
-また、このコンストラクタはファイルが存在しないなどの例外の場合に`wav_file_reader.h`内で定義されている`WFRException`オブジェクトをスローします。
+また、このコンストラクタはファイルが存在しないなどの例外の場合に`wav_file_reader.h`内で定義されている`WFRException`オブジェクトをスローします。  
 <br/>  
   
 ### __`Read()`関数__
 `template <class Type> unsigned int Read(Type *buf, unsigned int count);`  
 
-[上](#3-read関数でpcmデータを読み込む)でだいたい説明しました。戻り値は`fread()`関数と同じく読み込みに成功したサンプル数です。通常は第二引数と同じ値が返ります。
+[上](#3-read関数でpcmデータを読み込む)でだいたい説明しました。戻り値は`fread()`関数と同じく読み込みに成功したサンプル数です。通常は第二引数と同じ値が返ります。  
 <br />  
   
 ### __`ReadLR()`関数__
