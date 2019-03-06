@@ -23,6 +23,13 @@ void example() {
 	return;
 }
 ```
+Contained class member public functions are as follows.
+
+* Read
+* ReadLR
+* Seek
+* Tell
+
 See `sample.cpp` for more details.
 
 ## Note
