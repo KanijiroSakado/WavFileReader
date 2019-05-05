@@ -2,7 +2,7 @@
 #else
 #define WAV_FILE_READER_H
 
-#define _CRT_SECURE_NO_WARNINGS//without this, Visual Studio throws warnings that suggests to use fopen_s insteadof fopen function
+#define _CRT_SECURE_NO_WARNINGS//without this, Visual Studio throws warnings that suggests to use fopen_s() instead of fopen()
 
 #include<cstdio>
 #include<cstdlib>
