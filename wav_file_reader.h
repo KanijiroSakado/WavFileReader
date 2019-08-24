@@ -189,6 +189,8 @@ namespace gold {
 
 		
 		int Seek(long offset, int origin) {
+			if (origin == SEEK_SET)wavFilePointer = 0;
+			if (origin == SEEK_END)wavFilePointer = NumData - 1;
 			if ((long)wavFilePointer < (-1) * offset) {
 				fseek(fp, (-1) * wavFilePointer * BlockAlign, origin);
 				wavFilePointer = 0;
