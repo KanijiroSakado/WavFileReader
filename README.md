@@ -8,7 +8,7 @@ A simple and easy C++ single-header library for reading(loading) WAV files.
 
 ## How To Use
 1. Include `wav_file_reader.h`.  
-1. Create `gold::WavFileReader` object and use `Read()` function to read data from WAV files.  
+1. Create `sakado::WavFileReader` object and use `Read()` function to read data from WAV files.  
 
 The way of using it is very similar to  `fread()` function in C language.  
 ```
@@ -16,7 +16,7 @@ The way of using it is very similar to  `fread()` function in C language.
 
 void example() {
 	unsigned char buf[44100];
-	gold::WavFileReader wfr("test.wav");
+	sakado::WavFileReader wfr("test.wav");
 	
 	wfr.Read(buf, 44100);
 
