@@ -3,7 +3,7 @@
 
 
 # 1. ヘッダをインクルードする
-https://github.com/GoldSakana/WavFileReader
+https://github.com/KojiroSakado/WavFileReader
 githubからWavFileReaderのリポジトリをcloneもしくはダウンロードし、その中にある`wav_file_reader.h`をこのライブラリを使用したいファイルの先頭でインクルードしてください。
 
 ```C++
@@ -13,9 +13,9 @@ githubからWavFileReaderのリポジトリをcloneもしくはダウンロー�
 # 2. `WavFileReader`のインスタンスを作る
 
 ```C++
-	gold::WavFileReader wfr("test.wav");
+	sakado::WavFileReader wfr("test.wav");
 ```
-作ってください。名前空間`gold`をお忘れなく。読み込むファイルもここで指定してください。
+作ってください。名前空間`sakado`をお忘れなく。読み込むファイルもここで指定してください。
 　　
 # 3. `Read()`関数でPCMデータを読み込む
 `template <class Type> unsigned int Read(Type *buf, unsigned int count);`  
@@ -44,7 +44,7 @@ githubからWavFileReaderのリポジトリをcloneもしくはダウンロー�
 
 int main(void) {
 
-	gold::WavFileReader wfr("test.wav");
+	sakado::WavFileReader wfr("test.wav");
 	unsigned char buf[44100];
 	
 	wfr.Read(buf, 44100);//最初の44100サンプルを読み込み
