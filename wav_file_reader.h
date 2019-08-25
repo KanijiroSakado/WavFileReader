@@ -10,7 +10,7 @@
 #include<exception>
 
 
-namespace gold {
+namespace sakado {
 
 	class WFRException :public std::exception {};
 
