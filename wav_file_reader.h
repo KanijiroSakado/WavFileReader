@@ -8,6 +8,7 @@
 #include<cstdlib>
 #include<cstring>
 #include<exception>
+#include<iostream>
 
 using namespace std;
 
