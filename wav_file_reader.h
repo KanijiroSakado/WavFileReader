@@ -1,6 +1,6 @@
-#ifdef WAV_FILE_READER_H
+#ifdef SAKADO_WAV_FILE_READER_H
 #else
-#define WAV_FILE_READER_H
+#define SAKADO_WAV_FILE_READER_H
 
 #ifdef _MSC_VER
 #pragma warning(disable:4996)//Without this, Visual Studio throws warnings that suggests to use fopen_s() instead of fopen()
