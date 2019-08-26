@@ -60,7 +60,7 @@ namespace sakado {
 
 
 		WavFileReader(string filename) {
-			numPrimaryBuf = 44100;//default
+			numPrimaryBuf = 65536;//default
 			WavFileReaderPrivate(filename.c_str());
 		}
 
