@@ -3,8 +3,8 @@ A simple and easy C++ single-header library for reading(loading) WAV files.
 
 ## What You Can Do with This
 * Loading PCM data as single channel and multi channels 
-* Loading data from random point in the file 
-* Getting WAV format information of the file 
+* Loading data from random point in a file 
+* Getting WAV format information of a file 
 
 ## How To Use
 1. Include `wav_file_reader.h`.  
