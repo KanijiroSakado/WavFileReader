@@ -9,6 +9,7 @@
 #include<cstring>
 #include<exception>
 
+using namespace std;
 
 namespace sakado {
 
@@ -57,15 +58,15 @@ namespace sakado {
 		unsigned long NumData;
 
 
-		WavFileReader(const char*filename) {
+		WavFileReader(string filename) {
 			numPrimaryBuf = 44100;//default
-			WavFileReaderPrivate(filename);
+			WavFileReaderPrivate(filename.c_str());
 		}
 
 		
-		WavFileReader(const char* filename, unsigned int numPrimaryBuf) {
+		WavFileReader(string filename, unsigned int numPrimaryBuf) {
 			this->numPrimaryBuf = numPrimaryBuf;
-			WavFileReaderPrivate(filename);
+			WavFileReaderPrivate(filename.c_str());
 		}
 
 		
