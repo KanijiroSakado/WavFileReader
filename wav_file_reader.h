@@ -136,7 +136,7 @@ namespace sakado {
 					leftToRead -= numPrimaryBuf;
 				}
 
-				numSuccess = fread(primaryBuf, BytesPerSample, readCnt, fp);
+				numSuccess = fread(primaryBuf, BytesPerSample, readCnt, fp) / NumChannels;
 				if (numSuccess < readCnt) leftToRead = 0;
 
 				ArrangeReadData(buf, numSuccess);
@@ -180,7 +180,7 @@ namespace sakado {
 					leftToRead -= numPrimaryBuf;
 				}
 
-				numSuccess = fread(primaryBuf, BytesPerSample, readCnt, fp);
+				numSuccess = fread(primaryBuf, BytesPerSample, readCnt, fp) / NumChannels;
 				if (numSuccess < readCnt) leftToRead = 0;
 
 				ArrangeReadLRData(bufL, bufR, numSuccess);
