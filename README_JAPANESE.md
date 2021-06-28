@@ -3,7 +3,7 @@
 
 
 # 1. ヘッダをインクルードする
-https://github.com/KojiroSakado/WavFileReader
+https://github.com/KanijiroSakado/WavFileReader
 githubからWavFileReaderのリポジトリをcloneもしくはダウンロードし、その中にある`wav_file_reader.h`をこのライブラリを使用したいファイルの先頭でインクルードしてください。
 
 ```C++
